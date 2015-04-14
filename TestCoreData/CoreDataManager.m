@@ -96,7 +96,6 @@
 
 - (NSManagedObjectContext *)managedObjectContextForWrite:(BOOL)forWrite {
     
-//    forWrite = NO;
     NSManagedObjectContext* managedObjectContext = (forWrite ? _managedObjectContextForWrite : _managedObjectContext);
     if (managedObjectContext != nil) {
         return managedObjectContext;
