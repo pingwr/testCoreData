@@ -8,6 +8,9 @@
 
 #import "AppConfigures.h"
 
+#define COREDATA_MOMD_NAME   @"TestCoreData"
+#define COREDATA_SQLITE_NAME @"TestCoreData.sqlite"
+
 @interface AppConfigures ()
 {
     PTCoreDataManager* _coreDataManager;
@@ -34,7 +37,7 @@
     self = [super init];
     if(self)
     {
-        _coreDataManager = [[PTCoreDataManager alloc] initWithConfig:[[PTCoreDataCfg alloc] initWithMomdName:@"" sqliteName:@""]];
+        _coreDataManager = [[PTCoreDataManager alloc] initWithConfig:[[PTCoreDataCfg alloc] initWithMomdName:COREDATA_MOMD_NAME sqliteName:COREDATA_SQLITE_NAME]];
     }
     return self;
 }

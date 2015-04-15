@@ -9,7 +9,7 @@
 #import "MasterViewController.h"
 #import "DetailViewController.h"
 #import "Feature.h"
-#import "CoreDataManager.h"
+#import "AppConfigures.h"
 
 @interface MasterViewController ()
 
@@ -45,22 +45,24 @@
         }
     }
     
-    CoreDataManager* coreDataManager = [CoreDataManager singleton];
-    NSManagedObjectContext *context = coreDataManager.managedObjectContextForWrite;
     if(needCreateFeatureTypes.count > 0)
     {
-        [context performBlock:^{
+        PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
+        [threadContext performSaveWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+            
             for(NSNumber* type in needCreateFeatureTypes)
             {
-                Feature* featureNew = [coreDataManager createEntityObjectForWrite:YES fromClass:[Feature class]];
+                Feature* featureNew = [threadContext newEntityByClass:[Feature class]];
                 featureNew.type = [type integerValue];
                 featureNew.name = dictFeatures[type];
                 
-                [context insertObject:featureNew];
+                [managedObjectContext insertObject:featureNew];
             }
-            NSError* error;
-            [context save:&error];
 
+        } resultBlock:^(BOOL success) {
+            
+            NSLog(@"create features %@",success ? @"success" : @"failed");
+            
         }];
     }
 }
@@ -125,7 +127,7 @@
 
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Feature *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.textLabel.text = [object.name stringByAppendingString:(object.unread ? @"new" : @"readed")];
+    cell.textLabel.text = [object.name stringByAppendingString:(object.unread ? @" (new)" : @" (readed)")];
 }
 
 #pragma mark - Fetched results controller
@@ -137,9 +139,10 @@
         return _fetchedResultsController;
     }
     
+    PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     // Edit the entity name as appropriate.
-    NSEntityDescription *entity = [[CoreDataManager singleton] entityForWrite:NO fromClass:[Feature class]];
+    NSEntityDescription *entity = [mainContext entityDescriptionOfClass:[Feature class]];
     [fetchRequest setEntity:entity];
     
     // Set the batch size to a suitable number.
@@ -153,7 +156,7 @@
     
     // Edit the section name key path and cache name if appropriate.
     // nil for section name key path means "no sections".
-    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:[CoreDataManager singleton].managedObjectContext sectionNameKeyPath:nil cacheName:@"Master"];
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest managedObjectContext:mainContext.managedObjectContext sectionNameKeyPath:nil cacheName:@"Master"];
     aFetchedResultsController.delegate = self;
     self.fetchedResultsController = aFetchedResultsController;
     
