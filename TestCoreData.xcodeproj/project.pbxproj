@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A0557C21ADEA586002B5586 /* Feature.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0557C11ADEA586002B5586 /* Feature.m */; };
 		C220271C1ADB94340096878D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C220271B1ADB94340096878D /* main.m */; };
 		C220271F1ADB94340096878D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C220271E1ADB94340096878D /* AppDelegate.m */; };
 		C22027221ADB94340096878D /* TestCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C22027201ADB94340096878D /* TestCoreData.xcdatamodeld */; };
@@ -16,7 +17,6 @@
 		C220272D1ADB94340096878D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C220272C1ADB94340096878D /* Images.xcassets */; };
 		C22027301ADB94340096878D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C220272E1ADB94340096878D /* LaunchScreen.xib */; };
 		C220273C1ADB94340096878D /* TestCoreDataTests.m in Sources */ = {isa = PBXBuildFile; fileRef = C220273B1ADB94340096878D /* TestCoreDataTests.m */; };
-		C220274B1ADB9FEE0096878D /* Feature.m in Sources */ = {isa = PBXBuildFile; fileRef = C220274A1ADB9FEE0096878D /* Feature.m */; };
 		C25D6F471ADE365200ED2C40 /* PTCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C25D6F461ADE365200ED2C40 /* PTCoreDataManager.m */; };
 		C25D6F481ADE365200ED2C40 /* PTCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C25D6F461ADE365200ED2C40 /* PTCoreDataManager.m */; };
 		C25D6F4B1ADE36E300ED2C40 /* PTCoreDataCfg.m in Sources */ = {isa = PBXBuildFile; fileRef = C25D6F4A1ADE36E300ED2C40 /* PTCoreDataCfg.m */; };
@@ -38,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7A0557C01ADEA586002B5586 /* Feature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Feature.h; sourceTree = "<group>"; };
+		7A0557C11ADEA586002B5586 /* Feature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Feature.m; sourceTree = "<group>"; };
 		7A8C32FA1ADE998300949DC3 /* TestCoreData 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TestCoreData 2.xcdatamodel"; sourceTree = "<group>"; };
 		C22027161ADB94340096878D /* TestCoreData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestCoreData.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C220271A1ADB94340096878D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -55,8 +57,6 @@
 		C22027351ADB94340096878D /* TestCoreDataTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TestCoreDataTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C220273A1ADB94340096878D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C220273B1ADB94340096878D /* TestCoreDataTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestCoreDataTests.m; sourceTree = "<group>"; };
-		C22027491ADB9FEE0096878D /* Feature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Feature.h; path = data/Feature.h; sourceTree = "<group>"; };
-		C220274A1ADB9FEE0096878D /* Feature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Feature.m; path = data/Feature.m; sourceTree = "<group>"; };
 		C25D6F451ADE365200ED2C40 /* PTCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTCoreDataManager.h; sourceTree = "<group>"; };
 		C25D6F461ADE365200ED2C40 /* PTCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTCoreDataManager.m; sourceTree = "<group>"; };
 		C25D6F491ADE36E300ED2C40 /* PTCoreDataCfg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTCoreDataCfg.h; sourceTree = "<group>"; };
@@ -85,6 +85,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7A0557BF1ADEA54B002B5586 /* CoreDataObject */ = {
+			isa = PBXGroup;
+			children = (
+				7A0557C01ADEA586002B5586 /* Feature.h */,
+				7A0557C11ADEA586002B5586 /* Feature.m */,
+			);
+			path = CoreDataObject;
+			sourceTree = "<group>";
+		};
 		C220270D1ADB94340096878D = {
 			isa = PBXGroup;
 			children = (
@@ -106,6 +115,7 @@
 		C22027181ADB94340096878D /* TestCoreData */ = {
 			isa = PBXGroup;
 			children = (
+				7A0557BF1ADEA54B002B5586 /* CoreDataObject */,
 				C25D6F441ADE365200ED2C40 /* CoreDataTools */,
 				C220271D1ADB94340096878D /* AppDelegate.h */,
 				C220271E1ADB94340096878D /* AppDelegate.m */,
@@ -120,8 +130,6 @@
 				C220272E1ADB94340096878D /* LaunchScreen.xib */,
 				C22027201ADB94340096878D /* TestCoreData.xcdatamodeld */,
 				C22027191ADB94340096878D /* Supporting Files */,
-				C22027491ADB9FEE0096878D /* Feature.h */,
-				C220274A1ADB9FEE0096878D /* Feature.m */,
 			);
 			path = TestCoreData;
 			sourceTree = "<group>";
@@ -269,11 +277,11 @@
 				C25D6F4B1ADE36E300ED2C40 /* PTCoreDataCfg.m in Sources */,
 				C25D6F471ADE365200ED2C40 /* PTCoreDataManager.m in Sources */,
 				C22027281ADB94340096878D /* DetailViewController.m in Sources */,
-				C220274B1ADB9FEE0096878D /* Feature.m in Sources */,
 				C22027251ADB94340096878D /* MasterViewController.m in Sources */,
 				C220271F1ADB94340096878D /* AppDelegate.m in Sources */,
 				C22027221ADB94340096878D /* TestCoreData.xcdatamodeld in Sources */,
 				C25D6F541ADE508E00ED2C40 /* AppConfigures.m in Sources */,
+				7A0557C21ADEA586002B5586 /* Feature.m in Sources */,
 				C220271C1ADB94340096878D /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
