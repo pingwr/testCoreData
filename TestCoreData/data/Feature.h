@@ -10,6 +10,7 @@
 
 typedef NS_OPTIONS(NSUInteger, FeatureType) {
     FeatureTypeInheri = 1,
+    FeatureTypeRelation,
     
 };
 

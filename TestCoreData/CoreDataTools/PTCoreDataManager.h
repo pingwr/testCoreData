@@ -17,5 +17,6 @@
 //should be called in main thread
 - (PTCoreDataContext*)getMainContext;
 - (PTCoreDataContext*)getThreadContext;
+- (PTCoreDataContext*)getRootContext;
 
 @end

@@ -57,6 +57,7 @@
     
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:_config.sqliteName];
+    NSLog(@"sqlite path: %@",storeURL);
     NSError *error = nil;
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
         // Report any error we got.
@@ -102,10 +103,10 @@
 
 - (PTCoreDataContext*)getRootContext
 {
+    return nil;
     if(_rootContext == nil)
     {
-        NSManagedObjectContext* managedObjectContext = [self createManagedObjectContextWithParentContext:nil mainQueue:NO];
-        _rootContext = [[PTCoreDataContext alloc] initWithManagedObjectContext:managedObjectContext parentContext:nil];
+        _rootContext = [self createCoreDataContextWithParentContext:nil mainQueue:NO];
     }
     
     return _rootContext;
