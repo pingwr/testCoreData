@@ -131,9 +131,10 @@
     return [[class alloc] initWithEntity:[self entityForWrite:forWrite fromClass:class] insertIntoManagedObjectContext:[self managedObjectContextForWrite:forWrite]];
 }
 
-- (void)test
+- (int)test
 {
     int i =0;
+    return i;
 }
 
 @end
