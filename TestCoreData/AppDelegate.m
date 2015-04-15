@@ -9,7 +9,6 @@
 #import "AppDelegate.h"
 #import "DetailViewController.h"
 #import "MasterViewController.h"
-#import "CoreDataManager.h"
 
 @interface AppDelegate ()
 

@@ -14,7 +14,8 @@
     self = [super init];
     if(self)
     {
-        
+        _momdName = momdName;
+        _sqliteName = sqliteName;
     }
     return self;
 }

@@ -63,4 +63,15 @@
     }];
 }
 
+-(NSEntityDescription*)entityDescriptionOfClass:(Class)class
+{
+    return [NSEntityDescription entityForName:NSStringFromClass(class) inManagedObjectContext:_managedObjectContext];
+}
+
+- (id)newEntityByClass:(Class)class
+{
+    
+    return [[class alloc] initWithEntity:[self entityDescriptionOfClass:class] insertIntoManagedObjectContext:_managedObjectContext];
+}
+
 @end
