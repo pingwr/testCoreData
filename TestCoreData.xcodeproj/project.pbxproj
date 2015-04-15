@@ -38,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7A8C32FA1ADE998300949DC3 /* TestCoreData 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TestCoreData 2.xcdatamodel"; sourceTree = "<group>"; };
 		C22027161ADB94340096878D /* TestCoreData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestCoreData.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C220271A1ADB94340096878D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C220271B1ADB94340096878D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -485,6 +486,7 @@
 		C22027201ADB94340096878D /* TestCoreData.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				7A8C32FA1ADE998300949DC3 /* TestCoreData 2.xcdatamodel */,
 				C22027211ADB94340096878D /* TestCoreData.xcdatamodel */,
 			);
 			currentVersion = C22027211ADB94340096878D /* TestCoreData.xcdatamodel */;
