@@ -10,8 +10,8 @@
 
 @implementation Feature
 
-@synthesize type = _type;
-@synthesize name = _name;
-@synthesize unread = _unread;
+@dynamic type;
+@dynamic name;
+@dynamic unread;
 
 @end

@@ -36,7 +36,7 @@
         if(block)
             block(_managedObjectContext);
         
-        NSLog(@"%@,%@ before save",self,_managedObjectContext.hasChanges ? @"has changed" : @"no changed");
+//        NSLog(@"%@,%@ before save",self,_managedObjectContext.hasChanges ? @"has changed" : @"no changed");
         BOOL saveSuccess = [_managedObjectContext save:nil];
         if((_parentContext != nil) && saveSuccess)
         {

@@ -103,7 +103,6 @@
 
 - (PTCoreDataContext*)getRootContext
 {
-    return nil;
     if(_rootContext == nil)
     {
         _rootContext = [self createCoreDataContextWithParentContext:nil mainQueue:NO];

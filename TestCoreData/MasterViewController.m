@@ -32,67 +32,8 @@
     [self createFeatures];
 }
 
-- (void)testLoadFeatures
-{
-    PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    // Edit the entity name as appropriate.
-    NSEntityDescription *entity = [mainContext entityDescriptionOfClass:[Feature class]];
-    [fetchRequest setEntity:entity];
-    
-    // Set the batch size to a suitable number.
-    //    [fetchRequest setFetchBatchSize:20];
-    
-    // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"type" ascending:NO];
-    NSArray *sortDescriptors = @[sortDescriptor];
-    
-    [fetchRequest setSortDescriptors:sortDescriptors];
-    
-    [mainContext.managedObjectContext performBlockAndWait:^{
-        NSArray *fetchedObjects = [mainContext.managedObjectContext executeFetchRequest:fetchRequest error:nil];
-        for(Feature* feature in fetchedObjects)
-        {
-            NSLog(@"feature - name:%@ type:%d",feature.name,feature.type);
-        }
-    }];
-
-    NSDictionary* dictFeatures = @{
-                                   @(FeatureTypeInheri):@"Inheritance"
-                                   ,@(FeatureTypeRelation):@"Relation"
-                                   };
-
-    [mainContext performSaveWithBlock:^(NSManagedObjectContext *managedObjectContext) {
-        
-        for(NSNumber* type in dictFeatures.allKeys)
-        {
-            Feature* featureNew = [mainContext newEntityByClass:[Feature class]];
-            featureNew.type = [type integerValue];
-            featureNew.name = dictFeatures[type];
-            
-            [managedObjectContext insertObject:featureNew];
-        }
-        
-    } resultBlock:^(BOOL success) {
-        
-        NSLog(@"create features %@",success ? @"success" : @"failed");
-        
-        [mainContext.managedObjectContext performBlockAndWait:^{
-            NSArray *fetchedObjects = [mainContext.managedObjectContext executeFetchRequest:fetchRequest error:nil];
-            for(Feature* feature in fetchedObjects)
-            {
-                NSLog(@"feature - name:%@ type:%d",feature.name,feature.type);
-            }
-        }];
-    }];
-    
-}
-
 - (void)createFeatures
 {
-    [self testLoadFeatures];
-    return;
-    
     NSDictionary* dictFeatures = @{
                                    @(FeatureTypeInheri):@"Inheritance"
                                    ,@(FeatureTypeRelation):@"Relation"
@@ -109,7 +50,7 @@
     
     if(needCreateFeatureTypes.count > 0)
     {
-        PTCoreDataContext* threadContext = [[AppConfigures singleton] getMainContext];
+        PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
         [threadContext performSaveWithBlock:^(NSManagedObjectContext *managedObjectContext) {
             
             for(NSNumber* type in needCreateFeatureTypes)
