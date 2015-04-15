@@ -19,6 +19,12 @@
 		C22027471ADB9ACB0096878D /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C22027461ADB9ACB0096878D /* CoreDataManager.m */; };
 		C22027481ADB9ADE0096878D /* CoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C22027461ADB9ACB0096878D /* CoreDataManager.m */; };
 		C220274B1ADB9FEE0096878D /* Feature.m in Sources */ = {isa = PBXBuildFile; fileRef = C220274A1ADB9FEE0096878D /* Feature.m */; };
+		C25D6F471ADE365200ED2C40 /* PTCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C25D6F461ADE365200ED2C40 /* PTCoreDataManager.m */; };
+		C25D6F481ADE365200ED2C40 /* PTCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C25D6F461ADE365200ED2C40 /* PTCoreDataManager.m */; };
+		C25D6F4B1ADE36E300ED2C40 /* PTCoreDataCfg.m in Sources */ = {isa = PBXBuildFile; fileRef = C25D6F4A1ADE36E300ED2C40 /* PTCoreDataCfg.m */; };
+		C25D6F4C1ADE36E300ED2C40 /* PTCoreDataCfg.m in Sources */ = {isa = PBXBuildFile; fileRef = C25D6F4A1ADE36E300ED2C40 /* PTCoreDataCfg.m */; };
+		C25D6F4F1ADE384E00ED2C40 /* PTCoreDataContext.m in Sources */ = {isa = PBXBuildFile; fileRef = C25D6F4E1ADE384E00ED2C40 /* PTCoreDataContext.m */; };
+		C25D6F501ADE384E00ED2C40 /* PTCoreDataContext.m in Sources */ = {isa = PBXBuildFile; fileRef = C25D6F4E1ADE384E00ED2C40 /* PTCoreDataContext.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +58,12 @@
 		C22027461ADB9ACB0096878D /* CoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataManager.m; sourceTree = "<group>"; };
 		C22027491ADB9FEE0096878D /* Feature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Feature.h; path = data/Feature.h; sourceTree = "<group>"; };
 		C220274A1ADB9FEE0096878D /* Feature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Feature.m; path = data/Feature.m; sourceTree = "<group>"; };
+		C25D6F451ADE365200ED2C40 /* PTCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTCoreDataManager.h; sourceTree = "<group>"; };
+		C25D6F461ADE365200ED2C40 /* PTCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTCoreDataManager.m; sourceTree = "<group>"; };
+		C25D6F491ADE36E300ED2C40 /* PTCoreDataCfg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTCoreDataCfg.h; sourceTree = "<group>"; };
+		C25D6F4A1ADE36E300ED2C40 /* PTCoreDataCfg.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTCoreDataCfg.m; sourceTree = "<group>"; };
+		C25D6F4D1ADE384E00ED2C40 /* PTCoreDataContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTCoreDataContext.h; sourceTree = "<group>"; };
+		C25D6F4E1ADE384E00ED2C40 /* PTCoreDataContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTCoreDataContext.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +105,7 @@
 		C22027181ADB94340096878D /* TestCoreData */ = {
 			isa = PBXGroup;
 			children = (
+				C25D6F441ADE365200ED2C40 /* CoreDataTools */,
 				C220271D1ADB94340096878D /* AppDelegate.h */,
 				C220271E1ADB94340096878D /* AppDelegate.m */,
 				C22027231ADB94340096878D /* MasterViewController.h */,
@@ -136,6 +149,19 @@
 				C220273A1ADB94340096878D /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C25D6F441ADE365200ED2C40 /* CoreDataTools */ = {
+			isa = PBXGroup;
+			children = (
+				C25D6F491ADE36E300ED2C40 /* PTCoreDataCfg.h */,
+				C25D6F4A1ADE36E300ED2C40 /* PTCoreDataCfg.m */,
+				C25D6F451ADE365200ED2C40 /* PTCoreDataManager.h */,
+				C25D6F461ADE365200ED2C40 /* PTCoreDataManager.m */,
+				C25D6F4D1ADE384E00ED2C40 /* PTCoreDataContext.h */,
+				C25D6F4E1ADE384E00ED2C40 /* PTCoreDataContext.m */,
+			);
+			path = CoreDataTools;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -238,6 +264,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C25D6F4F1ADE384E00ED2C40 /* PTCoreDataContext.m in Sources */,
+				C25D6F4B1ADE36E300ED2C40 /* PTCoreDataCfg.m in Sources */,
+				C25D6F471ADE365200ED2C40 /* PTCoreDataManager.m in Sources */,
 				C22027471ADB9ACB0096878D /* CoreDataManager.m in Sources */,
 				C22027281ADB94340096878D /* DetailViewController.m in Sources */,
 				C220274B1ADB9FEE0096878D /* Feature.m in Sources */,
@@ -252,6 +281,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C25D6F501ADE384E00ED2C40 /* PTCoreDataContext.m in Sources */,
+				C25D6F481ADE365200ED2C40 /* PTCoreDataManager.m in Sources */,
+				C25D6F4C1ADE36E300ED2C40 /* PTCoreDataCfg.m in Sources */,
 				C22027481ADB9ADE0096878D /* CoreDataManager.m in Sources */,
 				C220273C1ADB94340096878D /* TestCoreDataTests.m in Sources */,
 			);
@@ -436,6 +468,7 @@
 				C22027411ADB94340096878D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C22027421ADB94340096878D /* Build configuration list for PBXNativeTarget "TestCoreDataTests" */ = {
 			isa = XCConfigurationList;
@@ -444,6 +477,7 @@
 				C22027441ADB94340096878D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
