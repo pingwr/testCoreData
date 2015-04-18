@@ -7,9 +7,9 @@
 //
 
 #import "MasterViewController.h"
-#import "DetailViewController.h"
 #import "Feature.h"
 #import "AppConfigures.h"
+#import "ThreadRWViewController.h"
 
 @interface MasterViewController ()
 
@@ -37,6 +37,7 @@
     NSDictionary* dictFeatures = @{
                                    @(FeatureTypeInheri):@"Inheritance"
                                    ,@(FeatureTypeRelation):@"Relation"
+                                   ,@(FeatureTypeThreadRW):@"跨线程读写对象"
                                    };
     NSArray *fetchedObjects = self.fetchedResultsController.fetchedObjects;
     NSMutableArray* needCreateFeatureTypes = [NSMutableArray arrayWithArray:dictFeatures.allKeys];
@@ -56,7 +57,7 @@
             for(NSNumber* type in needCreateFeatureTypes)
             {
                 Feature* featureNew = [threadContext newEntityByClass:[Feature class]];
-                featureNew.type = [type integerValue];
+                featureNew.type = [type intValue];
                 featureNew.name = dictFeatures[type];
                 
                 [managedObjectContext insertObject:featureNew];
@@ -79,16 +80,6 @@
     
     [self createFeatures];
 
-}
-
-#pragma mark - Segues
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    if ([[segue identifier] isEqualToString:@"showDetail"]) {
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        NSManagedObject *object = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-        [[segue destinationViewController] setDetailItem:object];
-    }
 }
 
 #pragma mark - Table View
@@ -129,6 +120,29 @@
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
     Feature *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
     cell.textLabel.text = [object.name stringByAppendingString:(object.unread ? @" (new)" : @" (readed)")];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Feature *feature = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+    switch(feature.type)
+    {
+        case FeatureTypeThreadRW:
+            [self.navigationController pushViewController:[[ThreadRWViewController alloc] initWithNibName:nil bundle:nil] animated:YES];
+            break;
+        default:
+            break;
+    }
+    
+    if(feature.unread)
+    {
+        [[[AppConfigures singleton] getMainContext] performSaveWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+            feature.unread = NO;
+            
+
+        } resultBlock:nil];
+    }
+    
 }
 
 #pragma mark - Fetched results controller

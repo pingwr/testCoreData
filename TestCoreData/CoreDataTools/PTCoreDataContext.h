@@ -15,7 +15,8 @@
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext*)managedObjectContext parentContext:(PTCoreDataContext*)parentContext;
 - (void)performSaveWithBlock:(void (^)(NSManagedObjectContext* managedObjectContext))block resultBlock:(void (^)(BOOL success))resultBlock;
--(NSEntityDescription*)entityDescriptionOfClass:(Class)class;
+- (NSEntityDescription*)entityDescriptionOfClass:(Class)class;
 - (id)newEntityByClass:(Class)class;
+- (id)findEntityOfClass:(Class)class attributeName:(NSString*)attributeName attributeValue:(NSObject*)attributeValue;
 
 @end

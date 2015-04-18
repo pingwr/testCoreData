@@ -8,11 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		7A0557C21ADEA586002B5586 /* Feature.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0557C11ADEA586002B5586 /* Feature.m */; };
+		7A3FFBA81AE2936100814217 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A3FFBA71AE2936100814217 /* User.m */; };
+		7A3FFBAD1AE296BA00814217 /* ThreadRWViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A3FFBAB1AE296BA00814217 /* ThreadRWViewController.m */; };
+		7A3FFBAE1AE296BA00814217 /* ThreadRWViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A3FFBAC1AE296BA00814217 /* ThreadRWViewController.xib */; };
 		C220271C1ADB94340096878D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C220271B1ADB94340096878D /* main.m */; };
 		C220271F1ADB94340096878D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C220271E1ADB94340096878D /* AppDelegate.m */; };
 		C22027221ADB94340096878D /* TestCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C22027201ADB94340096878D /* TestCoreData.xcdatamodeld */; };
 		C22027251ADB94340096878D /* MasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C22027241ADB94340096878D /* MasterViewController.m */; };
-		C22027281ADB94340096878D /* DetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C22027271ADB94340096878D /* DetailViewController.m */; };
 		C220272B1ADB94340096878D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C22027291ADB94340096878D /* Main.storyboard */; };
 		C220272D1ADB94340096878D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C220272C1ADB94340096878D /* Images.xcassets */; };
 		C22027301ADB94340096878D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = C220272E1ADB94340096878D /* LaunchScreen.xib */; };
@@ -40,6 +42,11 @@
 /* Begin PBXFileReference section */
 		7A0557C01ADEA586002B5586 /* Feature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Feature.h; sourceTree = "<group>"; };
 		7A0557C11ADEA586002B5586 /* Feature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Feature.m; sourceTree = "<group>"; };
+		7A3FFBA61AE2936100814217 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		7A3FFBA71AE2936100814217 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		7A3FFBAA1AE296BA00814217 /* ThreadRWViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThreadRWViewController.h; path = UIFlow/ThreadRWViewController.h; sourceTree = "<group>"; };
+		7A3FFBAB1AE296BA00814217 /* ThreadRWViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ThreadRWViewController.m; path = UIFlow/ThreadRWViewController.m; sourceTree = "<group>"; };
+		7A3FFBAC1AE296BA00814217 /* ThreadRWViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ThreadRWViewController.xib; path = UIFlow/ThreadRWViewController.xib; sourceTree = "<group>"; };
 		7A8C32FA1ADE998300949DC3 /* TestCoreData 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TestCoreData 2.xcdatamodel"; sourceTree = "<group>"; };
 		C22027161ADB94340096878D /* TestCoreData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestCoreData.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C220271A1ADB94340096878D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,8 +56,6 @@
 		C22027211ADB94340096878D /* TestCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestCoreData.xcdatamodel; sourceTree = "<group>"; };
 		C22027231ADB94340096878D /* MasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterViewController.h; sourceTree = "<group>"; };
 		C22027241ADB94340096878D /* MasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterViewController.m; sourceTree = "<group>"; };
-		C22027261ADB94340096878D /* DetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailViewController.h; sourceTree = "<group>"; };
-		C22027271ADB94340096878D /* DetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailViewController.m; sourceTree = "<group>"; };
 		C220272A1ADB94340096878D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C220272C1ADB94340096878D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		C220272F1ADB94340096878D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -90,8 +95,20 @@
 			children = (
 				7A0557C01ADEA586002B5586 /* Feature.h */,
 				7A0557C11ADEA586002B5586 /* Feature.m */,
+				7A3FFBA61AE2936100814217 /* User.h */,
+				7A3FFBA71AE2936100814217 /* User.m */,
 			);
 			path = CoreDataObject;
+			sourceTree = "<group>";
+		};
+		7A3FFBA91AE2963000814217 /* UIFlow */ = {
+			isa = PBXGroup;
+			children = (
+				7A3FFBAA1AE296BA00814217 /* ThreadRWViewController.h */,
+				7A3FFBAB1AE296BA00814217 /* ThreadRWViewController.m */,
+				7A3FFBAC1AE296BA00814217 /* ThreadRWViewController.xib */,
+			);
+			name = UIFlow;
 			sourceTree = "<group>";
 		};
 		C220270D1ADB94340096878D = {
@@ -115,6 +132,7 @@
 		C22027181ADB94340096878D /* TestCoreData */ = {
 			isa = PBXGroup;
 			children = (
+				7A3FFBA91AE2963000814217 /* UIFlow */,
 				7A0557BF1ADEA54B002B5586 /* CoreDataObject */,
 				C25D6F441ADE365200ED2C40 /* CoreDataTools */,
 				C220271D1ADB94340096878D /* AppDelegate.h */,
@@ -123,8 +141,6 @@
 				C25D6F531ADE508E00ED2C40 /* AppConfigures.m */,
 				C22027231ADB94340096878D /* MasterViewController.h */,
 				C22027241ADB94340096878D /* MasterViewController.m */,
-				C22027261ADB94340096878D /* DetailViewController.h */,
-				C22027271ADB94340096878D /* DetailViewController.m */,
 				C22027291ADB94340096878D /* Main.storyboard */,
 				C220272C1ADB94340096878D /* Images.xcassets */,
 				C220272E1ADB94340096878D /* LaunchScreen.xib */,
@@ -256,6 +272,7 @@
 				C220272B1ADB94340096878D /* Main.storyboard in Resources */,
 				C22027301ADB94340096878D /* LaunchScreen.xib in Resources */,
 				C220272D1ADB94340096878D /* Images.xcassets in Resources */,
+				7A3FFBAE1AE296BA00814217 /* ThreadRWViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,11 +293,12 @@
 				C25D6F4F1ADE384E00ED2C40 /* PTCoreDataContext.m in Sources */,
 				C25D6F4B1ADE36E300ED2C40 /* PTCoreDataCfg.m in Sources */,
 				C25D6F471ADE365200ED2C40 /* PTCoreDataManager.m in Sources */,
-				C22027281ADB94340096878D /* DetailViewController.m in Sources */,
 				C22027251ADB94340096878D /* MasterViewController.m in Sources */,
 				C220271F1ADB94340096878D /* AppDelegate.m in Sources */,
+				7A3FFBA81AE2936100814217 /* User.m in Sources */,
 				C22027221ADB94340096878D /* TestCoreData.xcdatamodeld in Sources */,
 				C25D6F541ADE508E00ED2C40 /* AppConfigures.m in Sources */,
+				7A3FFBAD1AE296BA00814217 /* ThreadRWViewController.m in Sources */,
 				7A0557C21ADEA586002B5586 /* Feature.m in Sources */,
 				C220271C1ADB94340096878D /* main.m in Sources */,
 			);

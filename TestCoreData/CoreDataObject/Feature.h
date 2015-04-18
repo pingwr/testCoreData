@@ -8,9 +8,10 @@
 
 #import <CoreData/CoreData.h>
 
-typedef NS_OPTIONS(NSUInteger, FeatureType) {
+typedef NS_OPTIONS(int32_t, FeatureType) {
     FeatureTypeInheri = 1,
     FeatureTypeRelation,
+    FeatureTypeThreadRW,
     
 };
 

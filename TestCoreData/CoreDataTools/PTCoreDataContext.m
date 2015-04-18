@@ -38,13 +38,14 @@
         
 //        NSLog(@"%@,%@ before save",self,_managedObjectContext.hasChanges ? @"has changed" : @"no changed");
         BOOL saveSuccess = [_managedObjectContext save:nil];
+//        NSLog(@"%@,%@ after save",self,_managedObjectContext.hasChanges ? @"has changed" : @"no changed");
         if((_parentContext != nil) && saveSuccess)
         {
             [_parentContext performSaveWithBlock:nil  resultBlock:resultBlock];
         }
         else
         {
-            if(_managedObjectContext.concurrencyType == NSMainQueueConcurrencyType)
+            if([self isMainQueueContext])
             {
                 if(resultBlock)
                     resultBlock(saveSuccess);
@@ -63,7 +64,12 @@
     }];
 }
 
--(NSEntityDescription*)entityDescriptionOfClass:(Class)class
+- (BOOL)isMainQueueContext
+{
+    return (_managedObjectContext.concurrencyType == NSMainQueueConcurrencyType);
+}
+
+- (NSEntityDescription*)entityDescriptionOfClass:(Class)class
 {
     return [NSEntityDescription entityForName:NSStringFromClass(class) inManagedObjectContext:_managedObjectContext];
 }
@@ -72,6 +78,34 @@
 {
     
     return [[class alloc] initWithEntity:[self entityDescriptionOfClass:class] insertIntoManagedObjectContext:_managedObjectContext];
+}
+
+- (id)findEntityOfClass:(Class)class attributeName:(NSString*)attributeName attributeValue:(NSObject*)attributeValue
+{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    // Edit the entity name as appropriate.
+    NSEntityDescription *entity = [self entityDescriptionOfClass:class];
+    [fetchRequest setEntity:entity];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat: @"%K == %@",attributeName,attributeValue];
+    [fetchRequest setPredicate:predicate];
+
+    __block NSArray* objects;
+    if([[NSThread currentThread] isMainThread] == [self isMainQueueContext])
+    {
+        objects = [_managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    }
+    else
+    {
+        [_managedObjectContext performBlockAndWait:^{
+            
+            objects = [_managedObjectContext executeFetchRequest:fetchRequest error:nil];
+            
+        }];
+    }
+    if(objects.count == 1)
+        return objects[0];
+    else
+        return nil;
 }
 
 @end
