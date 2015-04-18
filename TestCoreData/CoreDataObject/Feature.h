@@ -2,10 +2,11 @@
 //  Feature.h
 //  TestCoreData
 //
-//  Created by wping on 4/13/15.
-//  Copyright (c) 2015 DMSSQA. All rights reserved.
+//  Created by pingwr on 15-4-18.
+//  Copyright (c) 2015年 DMSSQA. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
 typedef NS_OPTIONS(int32_t, FeatureType) {
@@ -17,8 +18,8 @@ typedef NS_OPTIONS(int32_t, FeatureType) {
 
 @interface Feature : NSManagedObject
 
-@property(assign,nonatomic) FeatureType type;
-@property(copy,nonatomic) NSString* name;
-@property(assign,nonatomic) BOOL unread;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic) FeatureType type;
+@property (nonatomic) BOOL unread;
 
 @end

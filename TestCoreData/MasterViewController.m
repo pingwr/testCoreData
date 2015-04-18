@@ -136,9 +136,12 @@
     
     if(feature.unread)
     {
-        [[[AppConfigures singleton] getMainContext] performSaveWithBlock:^(NSManagedObjectContext *managedObjectContext) {
-            feature.unread = NO;
+        PTCoreDataContext* threadContext = [[AppConfigures singleton] getMainContext];
+        [threadContext performSaveWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+//            feature.unread = NO;
             
+            Feature* feature1 = [threadContext findEntityOfClass:[Feature class] attributeName:@"type" attributeValue:@(FeatureTypeThreadRW)];
+            feature1.unread = NO;
 
         } resultBlock:nil];
     }
