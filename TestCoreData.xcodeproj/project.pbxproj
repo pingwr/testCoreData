@@ -515,7 +515,7 @@
 				7A8C32FA1ADE998300949DC3 /* TestCoreData 2.xcdatamodel */,
 				C22027211ADB94340096878D /* TestCoreData.xcdatamodel */,
 			);
-			currentVersion = C22027211ADB94340096878D /* TestCoreData.xcdatamodel */;
+			currentVersion = 7A8C32FA1ADE998300949DC3 /* TestCoreData 2.xcdatamodel */;
 			path = TestCoreData.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
