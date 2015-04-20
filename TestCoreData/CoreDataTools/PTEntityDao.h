@@ -12,9 +12,13 @@
 @interface PTEntityDao : NSObject
 
 - (id)initWithManagedObjectContext:(NSManagedObjectContext*)managedObjectContext entityClass:(Class)entityClass;
+
 - (NSEntityDescription*)entityDescription;
 - (id)newObject;
+
 - (void)insertObject:(id)object;
+- (void)deleteAllObjects;
+
 - (id)findObjectByIDValue:(NSObject*)idValue;
 - (id)findObjectByAttributeName:(NSString*)attributeName attributeValue:(NSObject*)attributeValue;
 

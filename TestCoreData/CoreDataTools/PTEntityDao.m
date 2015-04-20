@@ -66,5 +66,17 @@
         return nil;
 }
 
+- (void)deleteAllObjects
+{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    // Edit the entity name as appropriate.
+    NSEntityDescription *entity = [self entityDescription];
+    [fetchRequest setEntity:entity];
+    NSArray* objects = [_managedObjectContext executeFetchRequest:fetchRequest error:nil];
+    for(id object in objects)
+    {
+        [_managedObjectContext deleteObject:object];
+    }
+}
 
 @end

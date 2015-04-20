@@ -33,6 +33,16 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)deleteAllUsers
+{
+    [[[AppConfigures singleton] getThreadContext] performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+        
+        UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
+        [dao deleteAllObjects];
+        
+    } resultBlock:nil];
+}
+
 /*
 #pragma mark - Navigation
 
@@ -98,6 +108,7 @@
         [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? user : threadUser)]] mainThread:NO];
 
         [self.tableView reloadData];
+        [self deleteAllUsers];
     }];
 }
 
@@ -126,6 +137,8 @@
         [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(mainUser==nil ? @"can't " : @""),[self userDesc:(mainUser==nil ? user : mainUser)]] mainThread:YES];
         
         [self.tableView reloadData];
+        [self deleteAllUsers];
+        
     }];
 }
 
