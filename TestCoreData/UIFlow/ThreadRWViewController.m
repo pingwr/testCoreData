@@ -14,23 +14,41 @@
 @interface ThreadRWViewController ()
 {
     NSMutableArray* _descriptions;
+    NSMutableArray* _tasks;
 }
 @end
 
 @implementation ThreadRWViewController
+- (id)init
+{
+    self = [super init];
+    if(self)
+    {
+        _descriptions = [NSMutableArray new];
+        _tasks = [NSMutableArray new];
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [[self tableView] registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
-    _descriptions = [NSMutableArray new];
-//    [self testMainInsertThreadRead];
-    [self testThreadInsertMainRead];
+    [self addMainInsertThreadReadTask];
+    [self addThreadInsertMainReadTask];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)continueNextTask
+{
+    if(_tasks.count > 0)
+    {
+        
+    }
 }
 
 - (void)deleteAllUsers
@@ -81,65 +99,74 @@
 }
 
 #pragma mark - test functions
-- (void)testMainInsertThreadRead
+- (void)addMainInsertThreadReadTask
 {
-    PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
-    __block User* user;
-    [mainContext performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {
-       
-        UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
-        user = [dao newObject];
-        user.id = 1;
-        user.name = @"a1";
+    void (^block)() = ^(){
         
-    } resultBlock:^(BOOL success) {
-        
-        [self pushDesc:[NSString stringWithFormat:@"save user %@",[self userDesc:user]] mainThread:YES];
-        
-        PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
-  
-        __block User* threadUser;
-        [threadContext performQueryAndWaitWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+        PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
+        __block User* user;
+        [mainContext performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {
             
             UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
-            threadUser = [dao findObjectByIDValue:@(user.id)];
-
+            user = [dao newObject];
+            user.id = 1;
+            user.name = @"a1";
+            
+        } resultBlock:^(BOOL success) {
+            
+            [self pushDesc:[NSString stringWithFormat:@"save user %@",[self userDesc:user]] mainThread:YES];
+            
+            PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
+            
+            __block User* threadUser;
+            [threadContext performQueryAndWaitWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+                
+                UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
+                threadUser = [dao findObjectByIDValue:@(user.id)];
+                
+            }];
+            [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? user : threadUser)]] mainThread:NO];
+            
+            [self.tableView reloadData];
+            [self deleteAllUsers];
         }];
-        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? user : threadUser)]] mainThread:NO];
 
-        [self.tableView reloadData];
-        [self deleteAllUsers];
-    }];
+    };
+    [_tasks addObject:block];
 }
 
-- (void)testThreadInsertMainRead
+- (void)addThreadInsertMainReadTask
 {
-    PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
-    __block User* user;
-    [threadContext performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+    void (^block)() = ^(){
         
-        UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
-        user = [dao newObject];
-        user.id = 1;
-        user.name = @"a1";
-        
-    } resultBlock:^(BOOL success) {
-        
-        [self pushDesc:[NSString stringWithFormat:@"save user %@",[self userDesc:user]] mainThread:NO];
-        
-        __block User* mainUser;
-        PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
-        [mainContext performQueryAndWaitWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+        PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
+        __block User* user;
+        [threadContext performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+            
             UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
-            mainUser = [dao findObjectByIDValue:@(user.id)];
+            user = [dao newObject];
+            user.id = 1;
+            user.name = @"a1";
+            
+        } resultBlock:^(BOOL success) {
+            
+            [self pushDesc:[NSString stringWithFormat:@"save user %@",[self userDesc:user]] mainThread:NO];
+            
+            __block User* mainUser;
+            PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
+            [mainContext performQueryAndWaitWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+                UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
+                mainUser = [dao findObjectByIDValue:@(user.id)];
+            }];
+            
+            [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(mainUser==nil ? @"can't " : @""),[self userDesc:(mainUser==nil ? user : mainUser)]] mainThread:YES];
+            
+            [self.tableView reloadData];
+            [self deleteAllUsers];
+            
         }];
-        
-        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(mainUser==nil ? @"can't " : @""),[self userDesc:(mainUser==nil ? user : mainUser)]] mainThread:YES];
-        
-        [self.tableView reloadData];
-        [self deleteAllUsers];
-        
-    }];
+    };
+    [_tasks addObject:block];
 }
 
 @end
