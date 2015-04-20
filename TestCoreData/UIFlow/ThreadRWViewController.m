@@ -21,7 +21,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [self testMainInsertThreadRead];
+    [[self tableView] registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
+    _descriptions = [NSMutableArray new];
+//    [self testMainInsertThreadRead];
+    [self testThreadInsertMainRead];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -56,6 +59,17 @@
     return _descriptions.count;
 }
 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    [self configureCell:cell atIndexPath:indexPath];
+    return cell;
+}
+
+- (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath {
+    cell.textLabel.text = _descriptions[[indexPath row]];
+}
+
+#pragma mark - test functions
 - (void)testMainInsertThreadRead
 {
     PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
@@ -73,8 +87,31 @@
         PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
         User* threadUser;
         threadUser = [threadContext findEntityOfClass:[User class] idValue:@(user.id)];
-        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(threadUser==nil ? @"can't " : @""),[self userDesc:threadUser]] mainThread:NO];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? user : threadUser)]] mainThread:NO];
 
+        [self.tableView reloadData];
+    }];
+}
+
+- (void)testThreadInsertMainRead
+{
+    PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
+    __block User* user;
+    [threadContext performSaveWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+        
+        user = [threadContext newEntityByClass:[User class]];
+        user.id = 1;
+        user.name = @"a1";
+        
+    } resultBlock:^(BOOL success) {
+        
+        [self pushDesc:[NSString stringWithFormat:@"save user %@",[self userDesc:user]] mainThread:NO];
+        
+        User* mainUser;
+        PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
+        mainUser = [mainContext findEntityOfClass:[User class] idValue:@(user.id)];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(mainUser==nil ? @"can't " : @""),[self userDesc:(mainUser==nil ? user : mainUser)]] mainThread:YES];
+        
         [self.tableView reloadData];
     }];
 }
