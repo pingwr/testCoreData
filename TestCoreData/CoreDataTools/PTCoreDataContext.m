@@ -80,6 +80,11 @@
     return [[class alloc] initWithEntity:[self entityDescriptionOfClass:class] insertIntoManagedObjectContext:_managedObjectContext];
 }
 
+- (id)findEntityOfClass:(Class)class idValue:(NSObject*)idValue
+{
+    return [self findEntityOfClass:class attributeName:@"id" attributeValue:idValue];
+}
+
 - (id)findEntityOfClass:(Class)class attributeName:(NSString*)attributeName attributeValue:(NSObject*)attributeValue
 {
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];

@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ThreadRWViewController : UIViewController
+@interface ThreadRWViewController : UITableViewController
 
 @end

@@ -124,15 +124,20 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    UIViewController* vc;
     Feature *feature = [[self fetchedResultsController] objectAtIndexPath:indexPath];
     switch(feature.type)
     {
         case FeatureTypeThreadRW:
-            [self.navigationController pushViewController:[[ThreadRWViewController alloc] initWithNibName:nil bundle:nil] animated:YES];
+            vc = [[ThreadRWViewController alloc] initWithNibName:nil bundle:nil];
             break;
         default:
             break;
     }
+    if(vc == nil)
+        return;
+    
+    [self.navigationController pushViewController:vc animated:YES];
     
     if(feature.unread)
     {

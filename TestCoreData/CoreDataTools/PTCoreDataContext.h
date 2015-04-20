@@ -17,6 +17,7 @@
 - (void)performSaveWithBlock:(void (^)(NSManagedObjectContext* managedObjectContext))block resultBlock:(void (^)(BOOL success))resultBlock;
 - (NSEntityDescription*)entityDescriptionOfClass:(Class)class;
 - (id)newEntityByClass:(Class)class;
+- (id)findEntityOfClass:(Class)class idValue:(NSObject*)idValue;
 - (id)findEntityOfClass:(Class)class attributeName:(NSString*)attributeName attributeValue:(NSObject*)attributeValue;
 
 @end

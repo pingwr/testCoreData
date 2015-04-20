@@ -12,7 +12,7 @@
 
 @interface User : NSManagedObject
 
-@property (nonatomic) int32_t userId;
+@property (nonatomic) int32_t id;
 @property (nonatomic, retain) NSString * name;
 
 @end
