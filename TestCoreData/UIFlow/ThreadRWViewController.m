@@ -9,6 +9,7 @@
 #import "ThreadRWViewController.h"
 #import "AppConfigures.h"
 #import "User.h"
+#import "UserDao.h"
 
 @interface ThreadRWViewController ()
 {
@@ -74,9 +75,10 @@
 {
     PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
     __block User* user;
-    [mainContext performSaveWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+    [mainContext performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {
        
-        user = [mainContext newEntityByClass:[User class]];
+        UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
+        user = [dao newObject];
         user.id = 1;
         user.name = @"a1";
         
@@ -85,8 +87,14 @@
         [self pushDesc:[NSString stringWithFormat:@"save user %@",[self userDesc:user]] mainThread:YES];
         
         PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
-        User* threadUser;
-        threadUser = [threadContext findEntityOfClass:[User class] idValue:@(user.id)];
+  
+        __block User* threadUser;
+        [threadContext performQueryAndWaitWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+            
+            UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
+            threadUser = [dao findObjectByIDValue:@(user.id)];
+
+        }];
         [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? user : threadUser)]] mainThread:NO];
 
         [self.tableView reloadData];
@@ -97,9 +105,10 @@
 {
     PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
     __block User* user;
-    [threadContext performSaveWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+    [threadContext performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {
         
-        user = [threadContext newEntityByClass:[User class]];
+        UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
+        user = [dao newObject];
         user.id = 1;
         user.name = @"a1";
         
@@ -107,9 +116,13 @@
         
         [self pushDesc:[NSString stringWithFormat:@"save user %@",[self userDesc:user]] mainThread:NO];
         
-        User* mainUser;
+        __block User* mainUser;
         PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
-        mainUser = [mainContext findEntityOfClass:[User class] idValue:@(user.id)];
+        [mainContext performQueryAndWaitWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+            UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
+            mainUser = [dao findObjectByIDValue:@(user.id)];
+        }];
+        
         [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(mainUser==nil ? @"can't " : @""),[self userDesc:(mainUser==nil ? user : mainUser)]] mainThread:YES];
         
         [self.tableView reloadData];

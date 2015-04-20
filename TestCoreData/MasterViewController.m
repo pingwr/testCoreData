@@ -10,6 +10,7 @@
 #import "Feature.h"
 #import "AppConfigures.h"
 #import "ThreadRWViewController.h"
+#import "FeatureDao.h"
 
 @interface MasterViewController ()
 
@@ -52,15 +53,16 @@
     if(needCreateFeatureTypes.count > 0)
     {
         PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
-        [threadContext performSaveWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+        [threadContext performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {
             
+            FeatureDao* dao = [[FeatureDao alloc] initWithManagedObjectContext:managedObjectContext];
             for(NSNumber* type in needCreateFeatureTypes)
             {
-                Feature* featureNew = [threadContext newEntityByClass:[Feature class]];
+                Feature* featureNew = [dao newObject];
                 featureNew.type = [type intValue];
                 featureNew.name = dictFeatures[type];
                 
-                [managedObjectContext insertObject:featureNew];
+                [dao insertObject:featureNew];
             }
 
         } resultBlock:^(BOOL success) {
@@ -110,7 +112,7 @@
         
         PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
         id object = [self.fetchedResultsController objectAtIndexPath:indexPath];
-        [mainContext performSaveWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+        [mainContext performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {
             [managedObjectContext deleteObject:object];
         } resultBlock:nil];
 
@@ -142,7 +144,7 @@
     if(feature.unread)
     {
         PTCoreDataContext* threadContext = [[AppConfigures singleton] getMainContext];
-        [threadContext performSaveWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+        [threadContext performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {
             feature.unread = NO;
             
         } resultBlock:nil];

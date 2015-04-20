@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7A3FFBA81AE2936100814217 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A3FFBA71AE2936100814217 /* User.m */; };
 		7A3FFBAD1AE296BA00814217 /* ThreadRWViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A3FFBAB1AE296BA00814217 /* ThreadRWViewController.m */; };
 		7A3FFBAE1AE296BA00814217 /* ThreadRWViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A3FFBAC1AE296BA00814217 /* ThreadRWViewController.xib */; };
-		7A3FFBB11AE2B3C900814217 /* Feature.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A3FFBB01AE2B3C900814217 /* Feature.m */; };
+		7AA1FE571AE541DF00A53208 /* PTEntityDao.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA1FE561AE541DF00A53208 /* PTEntityDao.m */; };
+		7AA1FE5F1AE5451200A53208 /* Feature.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA1FE5B1AE5451200A53208 /* Feature.m */; };
+		7AA1FE601AE5451200A53208 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA1FE5D1AE5451200A53208 /* User.m */; };
+		7AA1FE631AE5453300A53208 /* FeatureDao.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA1FE621AE5453300A53208 /* FeatureDao.m */; };
+		7AA1FE661AE5467C00A53208 /* UserDao.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA1FE651AE5467C00A53208 /* UserDao.m */; };
 		C220271C1ADB94340096878D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C220271B1ADB94340096878D /* main.m */; };
 		C220271F1ADB94340096878D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C220271E1ADB94340096878D /* AppDelegate.m */; };
 		C22027221ADB94340096878D /* TestCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C22027201ADB94340096878D /* TestCoreData.xcdatamodeld */; };
@@ -40,14 +43,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7A3FFBA61AE2936100814217 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
-		7A3FFBA71AE2936100814217 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		7A3FFBAA1AE296BA00814217 /* ThreadRWViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ThreadRWViewController.h; path = UIFlow/ThreadRWViewController.h; sourceTree = "<group>"; };
 		7A3FFBAB1AE296BA00814217 /* ThreadRWViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ThreadRWViewController.m; path = UIFlow/ThreadRWViewController.m; sourceTree = "<group>"; };
 		7A3FFBAC1AE296BA00814217 /* ThreadRWViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ThreadRWViewController.xib; path = UIFlow/ThreadRWViewController.xib; sourceTree = "<group>"; };
-		7A3FFBAF1AE2B3C900814217 /* Feature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Feature.h; sourceTree = "<group>"; };
-		7A3FFBB01AE2B3C900814217 /* Feature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Feature.m; sourceTree = "<group>"; };
 		7A8C32FA1ADE998300949DC3 /* TestCoreData 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "TestCoreData 2.xcdatamodel"; sourceTree = "<group>"; };
+		7AA1FE551AE541DF00A53208 /* PTEntityDao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTEntityDao.h; sourceTree = "<group>"; };
+		7AA1FE561AE541DF00A53208 /* PTEntityDao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTEntityDao.m; sourceTree = "<group>"; };
+		7AA1FE5A1AE5451200A53208 /* Feature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Feature.h; sourceTree = "<group>"; };
+		7AA1FE5B1AE5451200A53208 /* Feature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Feature.m; sourceTree = "<group>"; };
+		7AA1FE5C1AE5451200A53208 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		7AA1FE5D1AE5451200A53208 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		7AA1FE611AE5453300A53208 /* FeatureDao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeatureDao.h; sourceTree = "<group>"; };
+		7AA1FE621AE5453300A53208 /* FeatureDao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeatureDao.m; sourceTree = "<group>"; };
+		7AA1FE641AE5467C00A53208 /* UserDao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDao.h; sourceTree = "<group>"; };
+		7AA1FE651AE5467C00A53208 /* UserDao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDao.m; sourceTree = "<group>"; };
 		C22027161ADB94340096878D /* TestCoreData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestCoreData.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C220271A1ADB94340096878D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C220271B1ADB94340096878D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -90,17 +99,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		7A0557BF1ADEA54B002B5586 /* CoreDataObject */ = {
-			isa = PBXGroup;
-			children = (
-				7A3FFBA61AE2936100814217 /* User.h */,
-				7A3FFBA71AE2936100814217 /* User.m */,
-				7A3FFBAF1AE2B3C900814217 /* Feature.h */,
-				7A3FFBB01AE2B3C900814217 /* Feature.m */,
-			);
-			path = CoreDataObject;
-			sourceTree = "<group>";
-		};
 		7A3FFBA91AE2963000814217 /* UIFlow */ = {
 			isa = PBXGroup;
 			children = (
@@ -109,6 +107,37 @@
 				7A3FFBAC1AE296BA00814217 /* ThreadRWViewController.xib */,
 			);
 			name = UIFlow;
+			sourceTree = "<group>";
+		};
+		7AA1FE581AE5451200A53208 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7AA1FE591AE5451200A53208 /* Entity */,
+				7AA1FE5E1AE5451200A53208 /* EntityDao */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		7AA1FE591AE5451200A53208 /* Entity */ = {
+			isa = PBXGroup;
+			children = (
+				7AA1FE5A1AE5451200A53208 /* Feature.h */,
+				7AA1FE5B1AE5451200A53208 /* Feature.m */,
+				7AA1FE5C1AE5451200A53208 /* User.h */,
+				7AA1FE5D1AE5451200A53208 /* User.m */,
+			);
+			path = Entity;
+			sourceTree = "<group>";
+		};
+		7AA1FE5E1AE5451200A53208 /* EntityDao */ = {
+			isa = PBXGroup;
+			children = (
+				7AA1FE611AE5453300A53208 /* FeatureDao.h */,
+				7AA1FE621AE5453300A53208 /* FeatureDao.m */,
+				7AA1FE641AE5467C00A53208 /* UserDao.h */,
+				7AA1FE651AE5467C00A53208 /* UserDao.m */,
+			);
+			path = EntityDao;
 			sourceTree = "<group>";
 		};
 		C220270D1ADB94340096878D = {
@@ -132,8 +161,8 @@
 		C22027181ADB94340096878D /* TestCoreData */ = {
 			isa = PBXGroup;
 			children = (
+				7AA1FE581AE5451200A53208 /* Model */,
 				7A3FFBA91AE2963000814217 /* UIFlow */,
-				7A0557BF1ADEA54B002B5586 /* CoreDataObject */,
 				C25D6F441ADE365200ED2C40 /* CoreDataTools */,
 				C220271D1ADB94340096878D /* AppDelegate.h */,
 				C220271E1ADB94340096878D /* AppDelegate.m */,
@@ -185,6 +214,8 @@
 				C25D6F461ADE365200ED2C40 /* PTCoreDataManager.m */,
 				C25D6F4D1ADE384E00ED2C40 /* PTCoreDataContext.h */,
 				C25D6F4E1ADE384E00ED2C40 /* PTCoreDataContext.m */,
+				7AA1FE551AE541DF00A53208 /* PTEntityDao.h */,
+				7AA1FE561AE541DF00A53208 /* PTEntityDao.m */,
 			);
 			path = CoreDataTools;
 			sourceTree = "<group>";
@@ -290,17 +321,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A3FFBB11AE2B3C900814217 /* Feature.m in Sources */,
+				7AA1FE5F1AE5451200A53208 /* Feature.m in Sources */,
 				C25D6F4F1ADE384E00ED2C40 /* PTCoreDataContext.m in Sources */,
 				C25D6F4B1ADE36E300ED2C40 /* PTCoreDataCfg.m in Sources */,
 				C25D6F471ADE365200ED2C40 /* PTCoreDataManager.m in Sources */,
+				7AA1FE631AE5453300A53208 /* FeatureDao.m in Sources */,
 				C22027251ADB94340096878D /* MasterViewController.m in Sources */,
 				C220271F1ADB94340096878D /* AppDelegate.m in Sources */,
-				7A3FFBA81AE2936100814217 /* User.m in Sources */,
 				C22027221ADB94340096878D /* TestCoreData.xcdatamodeld in Sources */,
 				C25D6F541ADE508E00ED2C40 /* AppConfigures.m in Sources */,
+				7AA1FE601AE5451200A53208 /* User.m in Sources */,
+				7AA1FE571AE541DF00A53208 /* PTEntityDao.m in Sources */,
 				7A3FFBAD1AE296BA00814217 /* ThreadRWViewController.m in Sources */,
 				C220271C1ADB94340096878D /* main.m in Sources */,
+				7AA1FE661AE5467C00A53208 /* UserDao.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
