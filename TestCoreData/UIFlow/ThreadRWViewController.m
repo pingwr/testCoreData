@@ -19,9 +19,9 @@
 @end
 
 @implementation ThreadRWViewController
-- (id)init
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-    self = [super init];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if(self)
     {
         _descriptions = [NSMutableArray new];
@@ -34,8 +34,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [[self tableView] registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
-    [self addMainInsertThreadReadTask];
-    [self addThreadInsertMainReadTask];
+    [self addTask_MainInsertThreadRead];
+    [self addTask_ThreadInsertMainRead];
+    
+    [self continueNextTask];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -47,18 +49,28 @@
 {
     if(_tasks.count > 0)
     {
+        void (^block)() = _tasks[0];
+        [_tasks removeObjectAtIndex:0];
+        block();
         
+    }
+    else
+    {
+        [self.tableView reloadData];
     }
 }
 
-- (void)deleteAllUsers
+- (void)deleteAllUsersWithBlock:(void (^)())block
 {
     [[[AppConfigures singleton] getThreadContext] performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {
         
         UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
         [dao deleteAllObjects];
         
-    } resultBlock:nil];
+    } resultBlock:^(BOOL success) {
+        if(block)
+            block();
+    }];
 }
 
 /*
@@ -99,7 +111,7 @@
 }
 
 #pragma mark - test functions
-- (void)addMainInsertThreadReadTask
+- (void)addTask_MainInsertThreadRead
 {
     void (^block)() = ^(){
         
@@ -127,15 +139,16 @@
             }];
             [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? user : threadUser)]] mainThread:NO];
             
-            [self.tableView reloadData];
-            [self deleteAllUsers];
+            [self deleteAllUsersWithBlock:^{
+                [self continueNextTask];
+            }];
         }];
 
     };
     [_tasks addObject:block];
 }
 
-- (void)addThreadInsertMainReadTask
+- (void)addTask_ThreadInsertMainRead
 {
     void (^block)() = ^(){
         
@@ -161,9 +174,9 @@
             
             [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(mainUser==nil ? @"can't " : @""),[self userDesc:(mainUser==nil ? user : mainUser)]] mainThread:YES];
             
-            [self.tableView reloadData];
-            [self deleteAllUsers];
-            
+            [self deleteAllUsersWithBlock:^{
+                [self continueNextTask];
+            }];
         }];
     };
     [_tasks addObject:block];
