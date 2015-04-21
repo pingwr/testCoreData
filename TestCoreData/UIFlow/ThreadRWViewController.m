@@ -173,6 +173,45 @@ static int32_t nextUserId = 0;
     return user;
 }
 
+- (User*)findUserByObjectRegisteredForID:(NSManagedObjectID*)objectID mainThread:(BOOL)mainThread
+{
+    __block User* user;
+    NSManagedObjectContext *managedObjectContext = [self getManagedObjectContextOfMainThread:mainThread];
+    [managedObjectContext performBlockAndWait:^{
+        
+        user = (User*)[managedObjectContext objectRegisteredForID:objectID];
+        
+    }];
+    
+    return user;
+}
+
+- (User*)findUserByObjectWithID:(NSManagedObjectID*)objectID mainThread:(BOOL)mainThread
+{
+    __block User* user;
+    NSManagedObjectContext *managedObjectContext = [self getManagedObjectContextOfMainThread:mainThread];
+    [managedObjectContext performBlockAndWait:^{
+        
+        user = (User*)[managedObjectContext objectWithID:objectID];
+        
+    }];
+    
+    return user;
+}
+
+- (User*)findUserByExistingObjectWithID:(NSManagedObjectID*)objectID mainThread:(BOOL)mainThread
+{
+    __block User* user;
+    NSManagedObjectContext *managedObjectContext = [self getManagedObjectContextOfMainThread:mainThread];
+    [managedObjectContext performBlockAndWait:^{
+        
+        user = (User*)[managedObjectContext existingObjectWithID:objectID error:nil];
+        
+    }];
+    
+    return user;
+}
+
 - (void)addTask_MainInsertThreadRead
 {
     void (^block)() = ^(){
@@ -276,30 +315,29 @@ static int32_t nextUserId = 0;
         
         [self pushTaskDesc:@"insert in M without Save,read in S by object id"];
         
-        PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
-        NSManagedObjectContext *managedObjectContextMain = mainContext.managedObjectContext;
-        UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContextMain];
-        User* user;
-        user = [dao newObject];
-        user.id = ++nextUserId;
-        user.name = MAKE_USERNAME(user.id);
-        
-        [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:user]] mainThread:YES];
-        
-        PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
-        __block User* threadUser1;
-        __block User* threadUser2;
-        __block User* threadUser3;
-        [threadContext performQueryAndWaitWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+        {
+            User* user = [self insertUserInMainThread:YES];
+            [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:user]] mainThread:YES];
             
-            threadUser1 = (User*)[managedObjectContext objectRegisteredForID:user.objectID];
-            threadUser2 = (User*)[managedObjectContext objectWithID:user.objectID];
-            threadUser3 = (User*)[managedObjectContext existingObjectWithID:user.objectID error:nil];
+            User* threadUser = [self findUserByObjectRegisteredForID:user.objectID mainThread:NO];
+            [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectRegisteredForID",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? user : threadUser)]] mainThread:NO];
+        }
+        
+        {
+            User* user = [self insertUserInMainThread:YES];
+            [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:user]] mainThread:YES];
             
-        }];
-        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectRegisteredForID",(threadUser1==nil ? @"can't " : @""),[self userDesc:(threadUser1==nil ? user : threadUser1)]] mainThread:NO];
-        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(threadUser2==nil ? @"can't " : @""),[self userDesc:(threadUser2==nil ? user : threadUser2)]] mainThread:NO];
-        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by existingObjectWithID",(threadUser3==nil ? @"can't " : @""),[self userDesc:(threadUser3==nil ? user : threadUser3)]] mainThread:NO];
+            User* threadUser = [self findUserByObjectWithID:user.objectID mainThread:NO];
+            [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? user : threadUser)]] mainThread:NO];
+        }
+        
+        {
+            User* user = [self insertUserInMainThread:YES];
+            [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:user]] mainThread:YES];
+            
+            User* threadUser = [self findUserByExistingObjectWithID:user.objectID mainThread:NO];
+            [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by existingObjectWithID",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? user : threadUser)]] mainThread:NO];
+        }
         
         [self deleteAllUsersWithBlock:^{
             [self continueNextTask];
@@ -315,39 +353,32 @@ static int32_t nextUserId = 0;
         
         [self pushTaskDesc:@"insert in S without Save,read in M by object id"];
         
-        PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
-        NSManagedObjectContext *managedObjectContextThread = threadContext.managedObjectContext;
-        [managedObjectContextThread performBlock:^{
+        {
+            User* user = [self insertUserInMainThread:NO];
+            [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:user]] mainThread:NO];
             
-            UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContextThread];
-            User* user;
-            user = [dao newObject];
-            user.id = ++nextUserId;
-            user.name = MAKE_USERNAME(user.id);
+            User* mainUser = [self findUserByObjectRegisteredForID:user.objectID mainThread:YES];
+            [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectRegisteredForID",(mainUser==nil ? @"can't " : @""),[self userDesc:(mainUser==nil ? user : mainUser)]] mainThread:YES];
+        }
+        
+        {
+            User* user = [self insertUserInMainThread:NO];
+            [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:user]] mainThread:NO];
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:user]] mainThread:NO];
-                
-                __block User* mainUser1;
-                __block User* mainUser2;
-                __block User* mainUser3;
-                PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
-                [mainContext performQueryAndWaitWithBlock:^(NSManagedObjectContext *managedObjectContext) {
-                    mainUser1 = (User*)[managedObjectContext objectRegisteredForID:user.objectID];
-                    mainUser2 = (User*)[managedObjectContext objectWithID:user.objectID];
-                    mainUser3 = (User*)[managedObjectContext existingObjectWithID:user.objectID error:nil];
-                }];
-                
-                [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectRegisteredForID",(mainUser1==nil ? @"can't " : @""),[self userDesc:(mainUser1==nil ? user : mainUser1)]] mainThread:YES];
-                [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(mainUser2==nil ? @"can't " : @""),[self userDesc:(mainUser2==nil ? user : mainUser2)]] mainThread:YES];
-                [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by existingObjectWithID",(mainUser3==nil ? @"can't " : @""),[self userDesc:(mainUser3==nil ? user : mainUser3)]] mainThread:YES];
-                
-                [self deleteAllUsersWithBlock:^{
-                    [self continueNextTask];
-                }];
-            });
+            User* mainUser = [self findUserByObjectWithID:user.objectID mainThread:YES];
+            [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(mainUser==nil ? @"can't " : @""),[self userDesc:(mainUser==nil ? user : mainUser)]] mainThread:YES];
+        }
+        
+        {
+            User* user = [self insertUserInMainThread:NO];
+            [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:user]] mainThread:NO];
             
+            User* mainUser = [self findUserByExistingObjectWithID:user.objectID mainThread:YES];
+            [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by existingObjectWithID",(mainUser==nil ? @"can't " : @""),[self userDesc:(mainUser==nil ? user : mainUser)]] mainThread:YES];
+        }
+        
+        [self deleteAllUsersWithBlock:^{
+            [self continueNextTask];
         }];
         
     };
@@ -360,34 +391,40 @@ static int32_t nextUserId = 0;
         
         [self pushTaskDesc:@"update between M and S without save"];
 
-        PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
-        PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
-        NSManagedObjectContext *managedObjectContextThread = threadContext.managedObjectContext;
-        NSManagedObjectContext *managedObjectContextMain = mainContext.managedObjectContext;
+        User* mainUser = [self insertUserInMainThread:YES];
+        [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:mainUser]] mainThread:YES];
         
-        __block User* userMain;
-        __block User* threadUser;
+        User* threadUser = [self findUserByObjectWithID:mainUser.objectID mainThread:NO];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(threadUser==nil ? @"can't " : @""),(threadUser!=nil ? [self userDesc:threadUser] : @"")] mainThread:NO];
 
-        UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContextMain];
-        userMain = [dao newObject];
-        userMain.id = ++nextUserId;
-        userMain.name = MAKE_USERNAME(userMain.id);
-        [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:userMain]] mainThread:YES];
+        threadUser = [self findUserById:mainUser.id mainThread:NO];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? mainUser : threadUser)]] mainThread:NO];
         
-        [managedObjectContextThread performBlockAndWait:^{
-//            threadUser = (User*)[managedObjectContextThread existingObjectWithID:userMain.objectID error:nil];
-            threadUser = (User*)[managedObjectContextThread objectWithID:userMain.objectID];
-        }];
-        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by existingObjectWithID",(threadUser==nil ? @"can't " : @""),(threadUser!=nil ? [self userDesc:threadUser] : @"")] mainThread:NO];
+        mainUser.name = MAKE_USERNAME_(mainUser.id,1);
+        [self pushDesc:[NSString stringWithFormat:@"update user %@",[self userDesc:mainUser]] mainThread:YES];
+        
+        threadUser = [self findUserByObjectWithID:mainUser.objectID mainThread:NO];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(threadUser==nil ? @"can't " : @""),(threadUser!=nil ? [self userDesc:threadUser] : @"")] mainThread:NO];
+        
+        threadUser = [self findUserById:mainUser.id mainThread:NO];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? mainUser : threadUser)]] mainThread:NO];
+        
+        
+        
+        
+        mainUser = [self insertUserInMainThread:YES];
+        [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:mainUser]] mainThread:YES];
+        
+        mainUser.name = MAKE_USERNAME_(mainUser.id,1);
+        [self pushDesc:[NSString stringWithFormat:@"update user %@",[self userDesc:mainUser]] mainThread:YES];
+        
+        threadUser = [self findUserByObjectWithID:mainUser.objectID mainThread:NO];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(threadUser==nil ? @"can't " : @""),(threadUser!=nil ? [self userDesc:threadUser] : @"")] mainThread:NO];
+        
+        threadUser = [self findUserById:mainUser.id mainThread:NO];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? mainUser : threadUser)]] mainThread:NO];
+        
 
-        userMain.name = MAKE_USERNAME_(userMain.id,1);
-        [self pushDesc:[NSString stringWithFormat:@"update user %@",[self userDesc:userMain]] mainThread:YES];
-        
-        [managedObjectContextThread performBlockAndWait:^{
-            threadUser = (User*)[managedObjectContextThread existingObjectWithID:userMain.objectID error:nil];
-        }];
-        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by existingObjectWithID",(threadUser==nil ? @"can't " : @""),(threadUser!=nil ? [self userDesc:threadUser] : @"")] mainThread:NO];
-        
         [self deleteAllUsersWithBlock:^{
             [self continueNextTask];
         }];
