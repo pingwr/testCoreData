@@ -85,7 +85,12 @@
 
 - (void)pushDesc:(NSString*)desc mainThread:(BOOL)mainThread
 {
-    [_descriptions addObject:[NSString stringWithFormat:@"%@: %@",(mainThread ? @"M":@"          T"),desc]];
+    [_descriptions addObject:[NSString stringWithFormat:@"%@: %@",(mainThread ? @"M":@"          S"),desc]];
+}
+
+- (void)pushTaskDesc:(NSString*)desc
+{
+    [_descriptions addObject:[NSString stringWithFormat:@"********* %@",desc]];
 }
 
 - (NSString*)userDesc:(User*)user
@@ -115,6 +120,7 @@
 {
     void (^block)() = ^(){
         
+        [self pushTaskDesc:@"insert in M,read in S"];
         PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
         __block User* user;
         [mainContext performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {
@@ -152,6 +158,7 @@
 {
     void (^block)() = ^(){
         
+        [self pushTaskDesc:@"insert in S,read in M"];
         PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
         __block User* user;
         [threadContext performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {

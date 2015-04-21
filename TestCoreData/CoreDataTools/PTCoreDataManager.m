@@ -56,7 +56,19 @@
     // Create the coordinator and store
     
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:_config.sqliteName];
+    
+    NSURL* storeURL = [self applicationDocumentsDirectory];
+    NSArray* pathComponents = [_config.sqliteName componentsSeparatedByString:@"/"];
+    if(pathComponents.count > 1)
+    {
+        NSArray* dirComponents = [pathComponents subarrayWithRange:NSMakeRange(0,pathComponents.count-1)];
+        storeURL = [storeURL URLByAppendingPathComponent:[dirComponents componentsJoinedByString:@"/"]];
+        NSError* error;
+        [[NSFileManager defaultManager] createDirectoryAtPath:[storeURL path] withIntermediateDirectories:YES attributes:nil error:&error];
+        NSAssert(error == nil, @"db path create error");
+    }
+    storeURL = [storeURL URLByAppendingPathComponent:pathComponents[pathComponents.count-1]];
+
     NSLog(@"sqlite path: %@",storeURL);
     NSError *error = nil;
     

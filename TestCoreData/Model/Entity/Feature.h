@@ -13,6 +13,9 @@ typedef NS_OPTIONS(int32_t, FeatureType) {
     FeatureTypeInheri = 1,
     FeatureTypeRelation,
     FeatureTypeThreadRW,
+    FeatureTypeSavePerformace,
+    FeatureTypeQueryPerformace,
+    FeatureTypeMemoryUsed,
     
 };
 

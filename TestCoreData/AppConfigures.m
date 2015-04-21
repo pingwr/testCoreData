@@ -9,7 +9,7 @@
 #import "AppConfigures.h"
 
 #define COREDATA_MOMD_NAME   @"TestCoreData"
-#define COREDATA_SQLITE_NAME @"TestCoreData.sqlite"
+#define COREDATA_SQLITE_NAME @"TestCoreData/TestCoreData.sqlite"
 
 @interface AppConfigures ()
 {

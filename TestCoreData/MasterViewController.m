@@ -36,9 +36,12 @@
 - (void)createFeatures
 {
     NSDictionary* dictFeatures = @{
-                                   @(FeatureTypeInheri):@"Inheritance"
-                                   ,@(FeatureTypeRelation):@"Relation"
+                                   @(FeatureTypeInheri):@"继承"
+                                   ,@(FeatureTypeRelation):@"关系"
                                    ,@(FeatureTypeThreadRW):@"跨线程读写对象"
+                                   ,@(FeatureTypeSavePerformace):@"保存性能"
+                                   ,@(FeatureTypeQueryPerformace):@"查询性能"
+                                   ,@(FeatureTypeMemoryUsed):@"内存使用"
                                    };
     NSArray *fetchedObjects = self.fetchedResultsController.fetchedObjects;
     NSMutableArray* needCreateFeatureTypes = [NSMutableArray arrayWithArray:dictFeatures.allKeys];
@@ -170,8 +173,9 @@
 //    [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"type" ascending:NO];
-    NSArray *sortDescriptors = @[sortDescriptor];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"unread" ascending:NO];
+    NSSortDescriptor *sortDescriptor2 = [[NSSortDescriptor alloc] initWithKey:@"type" ascending:NO];
+    NSArray *sortDescriptors = @[sortDescriptor,sortDescriptor2];
     
     [fetchRequest setSortDescriptors:sortDescriptors];
     
