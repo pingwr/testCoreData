@@ -11,6 +11,11 @@
 #import "User.h"
 #import "UserDao.h"
 
+#define MAKE_USERNAME_(id,extra) [NSString stringWithFormat:@"u%d%@%@",id,(extra ? @"_" : @""),(extra ? @(extra) : @"")];
+#define MAKE_USERNAME(id)   MAKE_USERNAME_(id,0)
+
+static int32_t nextUserId = 0;
+
 @interface ThreadRWViewController ()
 {
     NSMutableArray* _descriptions;
@@ -40,6 +45,7 @@
     [self addTask_ThreadInsertWithoutSaveMainRead];
     [self addTask_MainInsertWithoutSaveThreadReadByObjectId];
     [self addTask_ThreadInsertWithoutSaveMainReadByObjectId];
+    [self addTask_UpdateWithoutSave];
     
     [self continueNextTask];
 }
@@ -89,12 +95,16 @@
 
 - (void)pushDesc:(NSString*)desc mainThread:(BOOL)mainThread
 {
-    [_descriptions addObject:[NSString stringWithFormat:@"%@: %@",(mainThread ? @"M":@"          S"),desc]];
+    NSString* log = [NSString stringWithFormat:@"%@: %@",(mainThread ? @"M":@"          S"),desc];
+    [_descriptions addObject:log];
+    NSLog(@"%@",log);
 }
 
 - (void)pushTaskDesc:(NSString*)desc
 {
-    [_descriptions addObject:[NSString stringWithFormat:@"********* %@",desc]];
+    NSString* log = [NSString stringWithFormat:@"********* %@",desc];
+    [_descriptions addObject:log];
+    NSLog(@"%@",log);
 }
 
 - (NSString*)userDesc:(User*)user
@@ -131,8 +141,8 @@
             
             UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
             user = [dao newObject];
-            user.id = 1;
-            user.name = @"a1";
+            user.id = ++nextUserId;
+            user.name = MAKE_USERNAME(user.id);
             
         } resultBlock:^(BOOL success) {
             
@@ -169,8 +179,8 @@
             
             UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
             user = [dao newObject];
-            user.id = 1;
-            user.name = @"a1";
+            user.id = ++nextUserId;
+            user.name = MAKE_USERNAME(user.id);
             
         } resultBlock:^(BOOL success) {
             
@@ -204,8 +214,8 @@
         UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContextMain];
         User* user;
         user = [dao newObject];
-        user.id = 2;
-        user.name = @"a2";
+        user.id = ++nextUserId;
+        user.name = MAKE_USERNAME(user.id);
         
         [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:user]] mainThread:YES];
         
@@ -240,8 +250,8 @@
             UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContextThread];
             User* user;
             user = [dao newObject];
-            user.id = 2;
-            user.name = @"a2";
+            user.id = ++nextUserId;
+            user.name = MAKE_USERNAME(user.id);
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -278,8 +288,8 @@
         UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContextMain];
         User* user;
         user = [dao newObject];
-        user.id = 3;
-        user.name = @"a3";
+        user.id = ++nextUserId;
+        user.name = MAKE_USERNAME(user.id);
         
         [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:user]] mainThread:YES];
         
@@ -319,8 +329,8 @@
             UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContextThread];
             User* user;
             user = [dao newObject];
-            user.id = 3;
-            user.name = @"a3";
+            user.id = ++nextUserId;
+            user.name = MAKE_USERNAME(user.id);
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 
@@ -351,5 +361,46 @@
     [_tasks addObject:block];
 }
 
+- (void)addTask_UpdateWithoutSave
+{
+    void (^block)() = ^(){
+        
+        [self pushTaskDesc:@"update between M and S without save"];
+
+        PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
+        PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
+        NSManagedObjectContext *managedObjectContextThread = threadContext.managedObjectContext;
+        NSManagedObjectContext *managedObjectContextMain = mainContext.managedObjectContext;
+        
+        __block User* userMain;
+        __block User* threadUser;
+
+        UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContextMain];
+        userMain = [dao newObject];
+        userMain.id = ++nextUserId;
+        userMain.name = MAKE_USERNAME(userMain.id);
+        [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:userMain]] mainThread:YES];
+        
+        [managedObjectContextThread performBlockAndWait:^{
+//            threadUser = (User*)[managedObjectContextThread existingObjectWithID:userMain.objectID error:nil];
+            threadUser = (User*)[managedObjectContextThread objectWithID:userMain.objectID];
+        }];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by existingObjectWithID",(threadUser==nil ? @"can't " : @""),(threadUser!=nil ? [self userDesc:threadUser] : @"")] mainThread:NO];
+
+        userMain.name = MAKE_USERNAME_(userMain.id,1);
+        [self pushDesc:[NSString stringWithFormat:@"update user %@",[self userDesc:userMain]] mainThread:YES];
+        
+        [managedObjectContextThread performBlockAndWait:^{
+            threadUser = (User*)[managedObjectContextThread existingObjectWithID:userMain.objectID error:nil];
+        }];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by existingObjectWithID",(threadUser==nil ? @"can't " : @""),(threadUser!=nil ? [self userDesc:threadUser] : @"")] mainThread:NO];
+        
+        [self deleteAllUsersWithBlock:^{
+            [self continueNextTask];
+        }];
+        
+    };
+    [_tasks addObject:block];
+}
 
 @end
