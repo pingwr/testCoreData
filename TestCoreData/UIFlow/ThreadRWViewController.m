@@ -130,14 +130,56 @@ static int32_t nextUserId = 0;
 }
 
 #pragma mark - test functions
+- (PTCoreDataContext*)getCoreDataContextOfMainThread:(BOOL)mainThread
+{
+    if(mainThread)
+        return [[AppConfigures singleton] getMainContext];
+    else
+        return [[AppConfigures singleton] getThreadContext];
+}
+
+- (NSManagedObjectContext*)getManagedObjectContextOfMainThread:(BOOL)mainThread
+{
+    return [[self getCoreDataContextOfMainThread:mainThread] managedObjectContext];
+}
+
+- (User*)insertUserInMainThread:(BOOL)mainThread
+{
+    __block User* user;
+    NSManagedObjectContext *managedObjectContext = [self getManagedObjectContextOfMainThread:mainThread];
+    [managedObjectContext performBlockAndWait:^{
+        
+        UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
+        user = [dao newObject];
+        user.id = ++nextUserId;
+        user.name = MAKE_USERNAME(user.id);
+
+    }];
+    
+    return user;
+}
+
+- (User*)findUserById:(int32_t)id mainThread:(BOOL)mainThread
+{
+    __block User* user;
+    NSManagedObjectContext *managedObjectContext = [self getManagedObjectContextOfMainThread:mainThread];
+    [managedObjectContext performBlockAndWait:^{
+        
+        UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
+        user = [dao findObjectByIDValue:@(id)];
+        
+    }];
+    
+    return user;
+}
+
 - (void)addTask_MainInsertThreadRead
 {
     void (^block)() = ^(){
         
         [self pushTaskDesc:@"insert in M,read in S"];
-        PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
         __block User* user;
-        [mainContext performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+        [[self getCoreDataContextOfMainThread:YES] performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {
             
             UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
             user = [dao newObject];
@@ -148,15 +190,7 @@ static int32_t nextUserId = 0;
             
             [self pushDesc:[NSString stringWithFormat:@"save user %@",[self userDesc:user]] mainThread:YES];
             
-            PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
-            
-            __block User* threadUser;
-            [threadContext performQueryAndWaitWithBlock:^(NSManagedObjectContext *managedObjectContext) {
-                
-                UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
-                threadUser = [dao findObjectByIDValue:@(user.id)];
-                
-            }];
+            User* threadUser = [self findUserById:user.id mainThread:NO];
             [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? user : threadUser)]] mainThread:NO];
             
             [self deleteAllUsersWithBlock:^{
@@ -173,9 +207,8 @@ static int32_t nextUserId = 0;
     void (^block)() = ^(){
         
         [self pushTaskDesc:@"insert in S,read in M"];
-        PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
         __block User* user;
-        [threadContext performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {
+        [[self getCoreDataContextOfMainThread:NO] performUpdateWithBlock:^(NSManagedObjectContext *managedObjectContext) {
             
             UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
             user = [dao newObject];
@@ -186,13 +219,7 @@ static int32_t nextUserId = 0;
             
             [self pushDesc:[NSString stringWithFormat:@"save user %@",[self userDesc:user]] mainThread:NO];
             
-            __block User* mainUser;
-            PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
-            [mainContext performQueryAndWaitWithBlock:^(NSManagedObjectContext *managedObjectContext) {
-                UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
-                mainUser = [dao findObjectByIDValue:@(user.id)];
-            }];
-            
+            User* mainUser = [self findUserById:user.id mainThread:YES];
             [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(mainUser==nil ? @"can't " : @""),[self userDesc:(mainUser==nil ? user : mainUser)]] mainThread:YES];
             
             [self deleteAllUsersWithBlock:^{
@@ -209,24 +236,10 @@ static int32_t nextUserId = 0;
         
         [self pushTaskDesc:@"insert in M without Save,read in S"];
 
-        PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
-        NSManagedObjectContext *managedObjectContextMain = mainContext.managedObjectContext;
-        UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContextMain];
-        User* user;
-        user = [dao newObject];
-        user.id = ++nextUserId;
-        user.name = MAKE_USERNAME(user.id);
-        
+        User* user = [self insertUserInMainThread:YES];
         [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:user]] mainThread:YES];
         
-        PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
-        __block User* threadUser;
-        [threadContext performQueryAndWaitWithBlock:^(NSManagedObjectContext *managedObjectContext) {
-            
-            UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
-            threadUser = [dao findObjectByIDValue:@(user.id)];
-            
-        }];
+        User* threadUser = [self findUserById:user.id mainThread:NO];
         [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? user : threadUser)]] mainThread:NO];
         
         [self deleteAllUsersWithBlock:^{
@@ -243,34 +256,14 @@ static int32_t nextUserId = 0;
         
         [self pushTaskDesc:@"insert in S without Save,read in M"];
         
-        PTCoreDataContext* threadContext = [[AppConfigures singleton] getThreadContext];
-        NSManagedObjectContext *managedObjectContextThread = threadContext.managedObjectContext;
-        [managedObjectContextThread performBlock:^{
-            
-            UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContextThread];
-            User* user;
-            user = [dao newObject];
-            user.id = ++nextUserId;
-            user.name = MAKE_USERNAME(user.id);
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:user]] mainThread:NO];
+        User* user = [self insertUserInMainThread:NO];
+        [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:user]] mainThread:NO];
 
-                __block User* mainUser;
-                PTCoreDataContext* mainContext = [[AppConfigures singleton] getMainContext];
-                [mainContext performQueryAndWaitWithBlock:^(NSManagedObjectContext *managedObjectContext) {
-                    UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
-                    mainUser = [dao findObjectByIDValue:@(user.id)];
-                }];
-                
-                [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(mainUser==nil ? @"can't " : @""),[self userDesc:(mainUser==nil ? user : mainUser)]] mainThread:YES];
-                
-                [self deleteAllUsersWithBlock:^{
-                    [self continueNextTask];
-                }];
-            });
-
+        User* mainUser = [self findUserById:user.id mainThread:YES];;
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(mainUser==nil ? @"can't " : @""),[self userDesc:(mainUser==nil ? user : mainUser)]] mainThread:YES];
+        
+        [self deleteAllUsersWithBlock:^{
+            [self continueNextTask];
         }];
         
     };
