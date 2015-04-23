@@ -39,13 +39,14 @@ static int32_t nextUserId = 0;
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     [[self tableView] registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
-    [self addTask_MainInsertThreadRead];
-    [self addTask_ThreadInsertMainRead];
-    [self addTask_MainInsertWithoutSaveThreadRead];
-    [self addTask_ThreadInsertWithoutSaveMainRead];
-    [self addTask_MainInsertWithoutSaveThreadReadByObjectId];
-    [self addTask_ThreadInsertWithoutSaveMainReadByObjectId];
-    [self addTask_UpdateWithoutSave];
+//    [self addTask_MainInsertThreadRead];
+//    [self addTask_ThreadInsertMainRead];
+//    [self addTask_MainInsertWithoutSaveThreadRead];
+//    [self addTask_ThreadInsertWithoutSaveMainRead];
+//    [self addTask_MainInsertWithoutSaveThreadReadByObjectId];
+//    [self addTask_ThreadInsertWithoutSaveMainReadByObjectId];
+//    [self addTask_UpdateCaseMainWriteThreadRead];
+    [self addTask_UpdateCaseThreadWriteMainRead];
     
     [self continueNextTask];
 }
@@ -385,46 +386,180 @@ static int32_t nextUserId = 0;
     [_tasks addObject:block];
 }
 
-- (void)addTask_UpdateWithoutSave
+- (void)addTask_UpdateCaseMainWriteThreadRead
 {
     void (^block)() = ^(){
         
-        [self pushTaskDesc:@"update between M and S without save"];
+        [self pushTaskDesc:@"update in M and S read"];
 
-        User* mainUser = [self insertUserInMainThread:YES];
-        [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:mainUser]] mainThread:YES];
+        BOOL mainWrite = YES;
+        User* writeUser = [self insertUserInMainThread:mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:writeUser]] mainThread:mainWrite];
         
-        User* threadUser = [self findUserByObjectWithID:mainUser.objectID mainThread:NO];
-        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(threadUser==nil ? @"can't " : @""),(threadUser!=nil ? [self userDesc:threadUser] : @"")] mainThread:NO];
+        User* readUser = [self findUserByObjectWithID:writeUser.objectID mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(readUser==nil ? @"can't " : @""),(readUser!=nil ? [self userDesc:readUser] : @"")] mainThread:!mainWrite];
 
-        threadUser = [self findUserById:mainUser.id mainThread:NO];
-        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? mainUser : threadUser)]] mainThread:NO];
+        readUser = [self findUserById:writeUser.id mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(readUser==nil ? @"can't " : @""),[self userDesc:(readUser==nil ? writeUser : readUser)]] mainThread:!mainWrite];
         
-        mainUser.name = MAKE_USERNAME_(mainUser.id,1);
-        [self pushDesc:[NSString stringWithFormat:@"update user %@",[self userDesc:mainUser]] mainThread:YES];
+        writeUser.name = MAKE_USERNAME_(writeUser.id,1);
+        [self pushDesc:[NSString stringWithFormat:@"update user %@",[self userDesc:writeUser]] mainThread:mainWrite];
         
-        threadUser = [self findUserByObjectWithID:mainUser.objectID mainThread:NO];
-        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(threadUser==nil ? @"can't " : @""),(threadUser!=nil ? [self userDesc:threadUser] : @"")] mainThread:NO];
+        readUser = [self findUserByObjectWithID:writeUser.objectID mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(readUser==nil ? @"can't " : @""),(readUser!=nil ? [self userDesc:readUser] : @"")] mainThread:!mainWrite];
         
-        threadUser = [self findUserById:mainUser.id mainThread:NO];
-        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? mainUser : threadUser)]] mainThread:NO];
+        readUser = [self findUserById:writeUser.id mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(readUser==nil ? @"can't " : @""),[self userDesc:(readUser==nil ? writeUser : readUser)]] mainThread:!mainWrite];
         
+        NSManagedObjectContext* managedObjectContextWrite = [self getManagedObjectContextOfMainThread:mainWrite];
+        [managedObjectContextWrite performBlockAndWait:^{
         
+            [managedObjectContextWrite save:nil];
+            
+        }];
+        [self pushDesc:[NSString stringWithFormat:@"save user %@ to root context",[self userDesc:writeUser]] mainThread:mainWrite];
         
+        readUser = [self findUserByObjectWithID:writeUser.objectID mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(readUser==nil ? @"can't " : @""),(readUser!=nil ? [self userDesc:readUser] : @"")] mainThread:!mainWrite];
         
-        mainUser = [self insertUserInMainThread:YES];
-        [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:mainUser]] mainThread:YES];
+        readUser = [self findUserById:writeUser.id mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(readUser==nil ? @"can't " : @""),[self userDesc:(readUser==nil ? writeUser : readUser)]] mainThread:!mainWrite];
         
-        mainUser.name = MAKE_USERNAME_(mainUser.id,1);
-        [self pushDesc:[NSString stringWithFormat:@"update user %@",[self userDesc:mainUser]] mainThread:YES];
+        [managedObjectContextWrite performBlockAndWait:^{
+            
+            [managedObjectContextWrite save:nil];
+            [managedObjectContextWrite.parentContext performBlockAndWait:^{
+                
+                [managedObjectContextWrite.parentContext save:nil];
+                
+            }];
+            
+        }];
+        [self pushDesc:[NSString stringWithFormat:@"save user %@ to sqlite",[self userDesc:writeUser]] mainThread:mainWrite];
         
-        threadUser = [self findUserByObjectWithID:mainUser.objectID mainThread:NO];
-        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(threadUser==nil ? @"can't " : @""),(threadUser!=nil ? [self userDesc:threadUser] : @"")] mainThread:NO];
+        readUser = [self findUserByObjectWithID:writeUser.objectID mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(readUser==nil ? @"can't " : @""),(readUser!=nil ? [self userDesc:readUser] : @"")] mainThread:!mainWrite];
         
-        threadUser = [self findUserById:mainUser.id mainThread:NO];
-        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(threadUser==nil ? @"can't " : @""),[self userDesc:(threadUser==nil ? mainUser : threadUser)]] mainThread:NO];
+        readUser = [self findUserById:writeUser.id mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(readUser==nil ? @"can't " : @""),[self userDesc:(readUser==nil ? writeUser : readUser)]] mainThread:!mainWrite];
+        
+        NSManagedObjectContext* managedObjectContextRead = [self getManagedObjectContextOfMainThread:!mainWrite];
+        [managedObjectContextRead refreshObject:readUser mergeChanges:YES];
+        [self pushDesc:[NSString stringWithFormat:@"%@refresh user %@",(readUser==nil ? @"can't " : @""),[self userDesc:(readUser==nil ? writeUser : readUser)]] mainThread:!mainWrite];
+        
+        readUser = [self findUserById:writeUser.id mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(readUser==nil ? @"can't " : @""),[self userDesc:(readUser==nil ? writeUser : readUser)]] mainThread:!mainWrite];
         
 
+        [self deleteAllUsersWithBlock:^{
+            [self continueNextTask];
+        }];
+        
+    };
+    [_tasks addObject:block];
+}
+
+- (void)addTask_UpdateCaseThreadWriteMainRead
+{
+    void (^block)() = ^(){
+        
+        [self pushTaskDesc:@"update in S and M read"];
+        
+        BOOL mainWrite = NO;
+        User* writeUser = [self insertUserInMainThread:mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"insert user %@",[self userDesc:writeUser]] mainThread:mainWrite];
+        
+        User* readUser = [self findUserByObjectWithID:writeUser.objectID mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(readUser==nil ? @"can't " : @""),(readUser!=nil ? [self userDesc:readUser] : @"")] mainThread:!mainWrite];
+        
+        readUser = [self findUserById:writeUser.id mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(readUser==nil ? @"can't " : @""),[self userDesc:(readUser==nil ? writeUser : readUser)]] mainThread:!mainWrite];
+        
+        NSManagedObjectContext* managedObjectContextWrite = [self getManagedObjectContextOfMainThread:mainWrite];
+        [managedObjectContextWrite performBlockAndWait:^{
+            
+            writeUser.name = MAKE_USERNAME_(writeUser.id,1);
+            
+        }];
+        [self pushDesc:[NSString stringWithFormat:@"update user %@",[self userDesc:writeUser]] mainThread:mainWrite];
+        
+        readUser = [self findUserByObjectWithID:writeUser.objectID mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(readUser==nil ? @"can't " : @""),(readUser!=nil ? [self userDesc:readUser] : @"")] mainThread:!mainWrite];
+        
+        readUser = [self findUserById:writeUser.id mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(readUser==nil ? @"can't " : @""),[self userDesc:(readUser==nil ? writeUser : readUser)]] mainThread:!mainWrite];
+        
+        [managedObjectContextWrite performBlockAndWait:^{
+            
+            [managedObjectContextWrite save:nil];
+            
+        }];
+        [self pushDesc:[NSString stringWithFormat:@"save user %@ to main context",[self userDesc:writeUser]] mainThread:mainWrite];
+        
+        readUser = [self findUserByObjectWithID:writeUser.objectID mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(readUser==nil ? @"can't " : @""),(readUser!=nil ? [self userDesc:readUser] : @"")] mainThread:!mainWrite];
+        
+        readUser = [self findUserById:writeUser.id mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(readUser==nil ? @"can't " : @""),[self userDesc:(readUser==nil ? writeUser : readUser)]] mainThread:!mainWrite];
+        
+        [managedObjectContextWrite performBlockAndWait:^{
+            
+            writeUser.name = MAKE_USERNAME_(writeUser.id,2);
+            
+        }];
+        [self pushDesc:[NSString stringWithFormat:@"update user %@",[self userDesc:writeUser]] mainThread:mainWrite];
+        
+        readUser = [self findUserByObjectWithID:writeUser.objectID mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(readUser==nil ? @"can't " : @""),(readUser!=nil ? [self userDesc:readUser] : @"")] mainThread:!mainWrite];
+        
+        readUser = [self findUserById:writeUser.id mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(readUser==nil ? @"can't " : @""),[self userDesc:(readUser==nil ? writeUser : readUser)]] mainThread:!mainWrite];
+
+        [managedObjectContextWrite performBlockAndWait:^{
+            
+            [managedObjectContextWrite save:nil];
+            
+        }];
+        [self pushDesc:[NSString stringWithFormat:@"save user %@ to main context",[self userDesc:writeUser]] mainThread:mainWrite];
+        
+        readUser = [self findUserByObjectWithID:writeUser.objectID mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(readUser==nil ? @"can't " : @""),(readUser!=nil ? [self userDesc:readUser] : @"")] mainThread:!mainWrite];
+        
+        readUser = [self findUserById:writeUser.id mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(readUser==nil ? @"can't " : @""),[self userDesc:(readUser==nil ? writeUser : readUser)]] mainThread:!mainWrite];
+        
+        
+        [managedObjectContextWrite performBlockAndWait:^{
+            
+            [managedObjectContextWrite save:nil];
+            [managedObjectContextWrite.parentContext performBlockAndWait:^{
+                
+                [managedObjectContextWrite.parentContext save:nil];
+                
+                [managedObjectContextWrite.parentContext.parentContext performBlockAndWait:^{
+                    
+                    [managedObjectContextWrite.parentContext.parentContext save:nil];
+                    
+                }];
+            }];
+            
+        }];
+        [self pushDesc:[NSString stringWithFormat:@"save user %@ to sqlite",[self userDesc:writeUser]] mainThread:mainWrite];
+        
+        readUser = [self findUserByObjectWithID:writeUser.objectID mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@ by objectWithID",(readUser==nil ? @"can't " : @""),(readUser!=nil ? [self userDesc:readUser] : @"")] mainThread:!mainWrite];
+        
+        readUser = [self findUserById:writeUser.id mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(readUser==nil ? @"can't " : @""),[self userDesc:(readUser==nil ? writeUser : readUser)]] mainThread:!mainWrite];
+        
+        NSManagedObjectContext* managedObjectContextRead = [self getManagedObjectContextOfMainThread:!mainWrite];
+        [managedObjectContextRead refreshObject:readUser mergeChanges:YES];
+        [self pushDesc:[NSString stringWithFormat:@"%@refresh user %@",(readUser==nil ? @"can't " : @""),[self userDesc:(readUser==nil ? writeUser : readUser)]] mainThread:!mainWrite];
+        
+        readUser = [self findUserById:writeUser.id mainThread:!mainWrite];
+        [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(readUser==nil ? @"can't " : @""),[self userDesc:(readUser==nil ? writeUser : readUser)]] mainThread:!mainWrite];
+        
+        
         [self deleteAllUsersWithBlock:^{
             [self continueNextTask];
         }];
