@@ -14,6 +14,8 @@
 		7AA1FE601AE5451200A53208 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA1FE5D1AE5451200A53208 /* User.m */; };
 		7AA1FE631AE5453300A53208 /* FeatureDao.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA1FE621AE5453300A53208 /* FeatureDao.m */; };
 		7AA1FE661AE5467C00A53208 /* UserDao.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA1FE651AE5467C00A53208 /* UserDao.m */; };
+		C2143E7D1AEB72B700C156F0 /* WritePerformaceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C2143E7B1AEB72B700C156F0 /* WritePerformaceViewController.m */; };
+		C2143E7E1AEB72B700C156F0 /* WritePerformaceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2143E7C1AEB72B700C156F0 /* WritePerformaceViewController.xib */; };
 		C220271C1ADB94340096878D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C220271B1ADB94340096878D /* main.m */; };
 		C220271F1ADB94340096878D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C220271E1ADB94340096878D /* AppDelegate.m */; };
 		C22027221ADB94340096878D /* TestCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C22027201ADB94340096878D /* TestCoreData.xcdatamodeld */; };
@@ -57,6 +59,9 @@
 		7AA1FE621AE5453300A53208 /* FeatureDao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeatureDao.m; sourceTree = "<group>"; };
 		7AA1FE641AE5467C00A53208 /* UserDao.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDao.h; sourceTree = "<group>"; };
 		7AA1FE651AE5467C00A53208 /* UserDao.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDao.m; sourceTree = "<group>"; };
+		C2143E7A1AEB72B700C156F0 /* WritePerformaceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WritePerformaceViewController.h; path = UIFlow/WritePerformaceViewController.h; sourceTree = "<group>"; };
+		C2143E7B1AEB72B700C156F0 /* WritePerformaceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WritePerformaceViewController.m; path = UIFlow/WritePerformaceViewController.m; sourceTree = "<group>"; };
+		C2143E7C1AEB72B700C156F0 /* WritePerformaceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WritePerformaceViewController.xib; path = UIFlow/WritePerformaceViewController.xib; sourceTree = "<group>"; };
 		C22027161ADB94340096878D /* TestCoreData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestCoreData.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C220271A1ADB94340096878D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C220271B1ADB94340096878D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -105,6 +110,9 @@
 				7A3FFBAA1AE296BA00814217 /* ThreadRWViewController.h */,
 				7A3FFBAB1AE296BA00814217 /* ThreadRWViewController.m */,
 				7A3FFBAC1AE296BA00814217 /* ThreadRWViewController.xib */,
+				C2143E7A1AEB72B700C156F0 /* WritePerformaceViewController.h */,
+				C2143E7B1AEB72B700C156F0 /* WritePerformaceViewController.m */,
+				C2143E7C1AEB72B700C156F0 /* WritePerformaceViewController.xib */,
 			);
 			name = UIFlow;
 			sourceTree = "<group>";
@@ -303,6 +311,7 @@
 				C220272B1ADB94340096878D /* Main.storyboard in Resources */,
 				C22027301ADB94340096878D /* LaunchScreen.xib in Resources */,
 				C220272D1ADB94340096878D /* Images.xcassets in Resources */,
+				C2143E7E1AEB72B700C156F0 /* WritePerformaceViewController.xib in Resources */,
 				7A3FFBAE1AE296BA00814217 /* ThreadRWViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -332,6 +341,7 @@
 				C25D6F541ADE508E00ED2C40 /* AppConfigures.m in Sources */,
 				7AA1FE601AE5451200A53208 /* User.m in Sources */,
 				7AA1FE571AE541DF00A53208 /* PTEntityDao.m in Sources */,
+				C2143E7D1AEB72B700C156F0 /* WritePerformaceViewController.m in Sources */,
 				7A3FFBAD1AE296BA00814217 /* ThreadRWViewController.m in Sources */,
 				C220271C1ADB94340096878D /* main.m in Sources */,
 				7AA1FE661AE5467C00A53208 /* UserDao.m in Sources */,

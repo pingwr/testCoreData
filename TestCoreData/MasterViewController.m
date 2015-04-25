@@ -11,6 +11,7 @@
 #import "AppConfigures.h"
 #import "ThreadRWViewController.h"
 #import "FeatureDao.h"
+#import "WritePerformaceViewController.h"
 
 @interface MasterViewController ()
 
@@ -135,6 +136,9 @@
     {
         case FeatureTypeThreadRW:
             vc = [[ThreadRWViewController alloc] initWithNibName:nil bundle:nil];
+            break;
+        case FeatureTypeSavePerformace:
+            vc = [[WritePerformaceViewController alloc] initWithNibName:nil bundle:nil];
             break;
         default:
             break;

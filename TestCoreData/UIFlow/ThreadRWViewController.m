@@ -45,8 +45,8 @@ static int32_t nextUserId = 0;
 //    [self addTask_ThreadInsertWithoutSaveMainRead];
 //    [self addTask_MainInsertWithoutSaveThreadReadByObjectId];
 //    [self addTask_ThreadInsertWithoutSaveMainReadByObjectId];
-//    [self addTask_UpdateCaseMainWriteThreadRead];
-    [self addTask_UpdateCaseThreadWriteMainRead];
+    [self addTask_UpdateCaseMainWriteThreadRead];
+//    [self addTask_UpdateCaseThreadWriteMainRead];
     
     [self continueNextTask];
 }
@@ -442,6 +442,7 @@ static int32_t nextUserId = 0;
         
         readUser = [self findUserById:writeUser.id mainThread:!mainWrite];
         [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(readUser==nil ? @"can't " : @""),[self userDesc:(readUser==nil ? writeUser : readUser)]] mainThread:!mainWrite];
+        User* readUserPrev = readUser;
         
         NSManagedObjectContext* managedObjectContextRead = [self getManagedObjectContextOfMainThread:!mainWrite];
         [managedObjectContextRead refreshObject:readUser mergeChanges:YES];
@@ -450,6 +451,7 @@ static int32_t nextUserId = 0;
         readUser = [self findUserById:writeUser.id mainThread:!mainWrite];
         [self pushDesc:[NSString stringWithFormat:@"%@find user %@",(readUser==nil ? @"can't " : @""),[self userDesc:(readUser==nil ? writeUser : readUser)]] mainThread:!mainWrite];
         
+        [self pushDesc:[NSString stringWithFormat:@"prev user %@",[self userDesc:readUserPrev]] mainThread:!mainWrite];
 
         [self deleteAllUsersWithBlock:^{
             [self continueNextTask];
