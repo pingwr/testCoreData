@@ -140,11 +140,13 @@ static int32_t nextUserId = 0;
     [managedObjectContext performBlockAndWait:^{
         
         UserDao* dao = [[UserDao alloc] initWithManagedObjectContext:managedObjectContext];
+        NSInteger bufLen = 1024;
         for(NSInteger i=0;i<userCount;i++)
         {
             User* user = [dao newObject];
             user.id = ++nextUserId;
             user.name = MAKE_USERNAME(user.id);
+            user.data = [[NSData alloc] initWithBytesNoCopy:malloc(bufLen) length:bufLen];
         }
         [managedObjectContext save:nil];
     }];
@@ -203,7 +205,8 @@ static int32_t nextUserId = 0;
 
 - (void)startTest
 {
-    NSArray* userCounts = @[@(1),@(10),@(100),@(1000),@(10000)];
+    NSInteger maxCount = 4000;
+    NSArray* userCounts = @[@(1),@(10),@(100),@(1000),@(maxCount)];
 //    for(NSNumber* userCount in userCounts)
 //    {
 //        [self doInsertWithUserCount:[userCount integerValue] fromMainContext:YES removeAfterDone:YES];
@@ -223,7 +226,7 @@ static int32_t nextUserId = 0;
     [self pushTaskDesc:@"insert 10000 users"];
     [self performPerformanceBlock:^{
         
-        [self insertUsersInContext:[self getManagedObjectContextOfMainThread:YES].parentContext userCount:10000];
+        [self insertUsersInContext:[self getManagedObjectContextOfMainThread:YES].parentContext userCount:maxCount];
         
     } desc:@"root context" mainThread:NO];
     

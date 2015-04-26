@@ -16,6 +16,8 @@
 		7AA1FE661AE5467C00A53208 /* UserDao.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AA1FE651AE5467C00A53208 /* UserDao.m */; };
 		C2143E7D1AEB72B700C156F0 /* WritePerformaceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C2143E7B1AEB72B700C156F0 /* WritePerformaceViewController.m */; };
 		C2143E7E1AEB72B700C156F0 /* WritePerformaceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2143E7C1AEB72B700C156F0 /* WritePerformaceViewController.xib */; };
+		C2143E821AEC76F800C156F0 /* QueryPerformanceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C2143E801AEC76F800C156F0 /* QueryPerformanceViewController.m */; };
+		C2143E831AEC76F800C156F0 /* QueryPerformanceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = C2143E811AEC76F800C156F0 /* QueryPerformanceViewController.xib */; };
 		C220271C1ADB94340096878D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C220271B1ADB94340096878D /* main.m */; };
 		C220271F1ADB94340096878D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C220271E1ADB94340096878D /* AppDelegate.m */; };
 		C22027221ADB94340096878D /* TestCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C22027201ADB94340096878D /* TestCoreData.xcdatamodeld */; };
@@ -62,6 +64,9 @@
 		C2143E7A1AEB72B700C156F0 /* WritePerformaceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WritePerformaceViewController.h; path = UIFlow/WritePerformaceViewController.h; sourceTree = "<group>"; };
 		C2143E7B1AEB72B700C156F0 /* WritePerformaceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WritePerformaceViewController.m; path = UIFlow/WritePerformaceViewController.m; sourceTree = "<group>"; };
 		C2143E7C1AEB72B700C156F0 /* WritePerformaceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = WritePerformaceViewController.xib; path = UIFlow/WritePerformaceViewController.xib; sourceTree = "<group>"; };
+		C2143E7F1AEC76F800C156F0 /* QueryPerformanceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QueryPerformanceViewController.h; path = UIFlow/QueryPerformanceViewController.h; sourceTree = "<group>"; };
+		C2143E801AEC76F800C156F0 /* QueryPerformanceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QueryPerformanceViewController.m; path = UIFlow/QueryPerformanceViewController.m; sourceTree = "<group>"; };
+		C2143E811AEC76F800C156F0 /* QueryPerformanceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = QueryPerformanceViewController.xib; path = UIFlow/QueryPerformanceViewController.xib; sourceTree = "<group>"; };
 		C22027161ADB94340096878D /* TestCoreData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestCoreData.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C220271A1ADB94340096878D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C220271B1ADB94340096878D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -113,6 +118,9 @@
 				C2143E7A1AEB72B700C156F0 /* WritePerformaceViewController.h */,
 				C2143E7B1AEB72B700C156F0 /* WritePerformaceViewController.m */,
 				C2143E7C1AEB72B700C156F0 /* WritePerformaceViewController.xib */,
+				C2143E7F1AEC76F800C156F0 /* QueryPerformanceViewController.h */,
+				C2143E801AEC76F800C156F0 /* QueryPerformanceViewController.m */,
+				C2143E811AEC76F800C156F0 /* QueryPerformanceViewController.xib */,
 			);
 			name = UIFlow;
 			sourceTree = "<group>";
@@ -308,6 +316,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C2143E831AEC76F800C156F0 /* QueryPerformanceViewController.xib in Resources */,
 				C220272B1ADB94340096878D /* Main.storyboard in Resources */,
 				C22027301ADB94340096878D /* LaunchScreen.xib in Resources */,
 				C220272D1ADB94340096878D /* Images.xcassets in Resources */,
@@ -334,6 +343,7 @@
 				C25D6F4F1ADE384E00ED2C40 /* PTCoreDataContext.m in Sources */,
 				C25D6F4B1ADE36E300ED2C40 /* PTCoreDataCfg.m in Sources */,
 				C25D6F471ADE365200ED2C40 /* PTCoreDataManager.m in Sources */,
+				C2143E821AEC76F800C156F0 /* QueryPerformanceViewController.m in Sources */,
 				7AA1FE631AE5453300A53208 /* FeatureDao.m in Sources */,
 				C22027251ADB94340096878D /* MasterViewController.m in Sources */,
 				C220271F1ADB94340096878D /* AppDelegate.m in Sources */,

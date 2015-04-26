@@ -1,9 +1,9 @@
 //
 //  User.h
-//  TestCoreData
+//  
 //
-//  Created by pingwr on 15-4-18.
-//  Copyright (c) 2015年 DMSSQA. All rights reserved.
+//  Created by wping on 4/26/15.
+//
 //
 
 #import <Foundation/Foundation.h>
@@ -12,7 +12,8 @@
 
 @interface User : NSManagedObject
 
-@property (nonatomic) int32_t id;
+@property (nonatomic, assign) int32_t id;
 @property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSData * data;
 
 @end

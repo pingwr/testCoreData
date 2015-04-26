@@ -12,6 +12,7 @@
 #import "ThreadRWViewController.h"
 #import "FeatureDao.h"
 #import "WritePerformaceViewController.h"
+#import "QueryPerformanceViewController.h"
 
 @interface MasterViewController ()
 
@@ -139,6 +140,9 @@
             break;
         case FeatureTypeSavePerformace:
             vc = [[WritePerformaceViewController alloc] initWithNibName:nil bundle:nil];
+            break;
+        case FeatureTypeQueryPerformace:
+            vc = [[QueryPerformanceViewController alloc] initWithNibName:nil bundle:nil];
             break;
         default:
             break;

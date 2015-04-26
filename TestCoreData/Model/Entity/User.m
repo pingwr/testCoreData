@@ -1,9 +1,9 @@
 //
 //  User.m
-//  TestCoreData
+//  
 //
-//  Created by pingwr on 15-4-18.
-//  Copyright (c) 2015年 DMSSQA. All rights reserved.
+//  Created by wping on 4/26/15.
+//
 //
 
 #import "User.h"
@@ -13,5 +13,6 @@
 
 @dynamic id;
 @dynamic name;
+@dynamic data;
 
 @end
