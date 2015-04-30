@@ -56,7 +56,7 @@ static int32_t nextUserId = 0;
             User* user = [dao newObject];
             user.id = ++nextUserId;
             user.name = MAKE_USERNAME(user.id);
-            user.data = [[NSData alloc] initWithBytesNoCopy:malloc(bufLen) length:bufLen];
+//            user.data = [[NSData alloc] initWithBytesNoCopy:malloc(bufLen) length:bufLen];
         }
     } resultBlock:nil];
     
@@ -112,7 +112,7 @@ static int32_t nextUserId = 0;
     [fetchRequest setFetchBatchSize:20];
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"id" ascending:YES];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"id" ascending:NO];
     NSArray *sortDescriptors = @[sortDescriptor];
     
     [fetchRequest setSortDescriptors:sortDescriptors];

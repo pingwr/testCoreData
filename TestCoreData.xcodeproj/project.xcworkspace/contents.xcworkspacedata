@@ -2,12 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:../TestCoreData/Model/Entity/User.h">
-   </FileRef>
-   <FileRef
-      location = "group:../TestCoreData/Model/Entity/User.m">
-   </FileRef>
-   <FileRef
       location = "self:TestCoreData.xcodeproj">
    </FileRef>
 </Workspace>
